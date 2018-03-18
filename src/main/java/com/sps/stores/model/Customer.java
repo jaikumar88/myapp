@@ -50,9 +50,7 @@ public class Customer {
 	private String dueAmount;
 
 	@NotEmpty
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "CUSTOMER", 
-             joinColumns = { @JoinColumn(name = "CUST_ID") })
+	@OneToMany(mappedBy="owner")
 	private Set<Activity> activities = new HashSet<Activity>();
 	/**
 	 * @return the id
