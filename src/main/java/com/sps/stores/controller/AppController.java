@@ -1,5 +1,7 @@
 package com.sps.stores.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,9 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.sps.stores.model.Activity;
+import com.sps.stores.model.Customer;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.User;
 import com.sps.stores.model.UserProfile;
+import com.sps.stores.service.ActivtiesService;
+import com.sps.stores.service.CustomerService;
 import com.sps.stores.service.StoreService;
 import com.sps.stores.service.UserProfileService;
 import com.sps.stores.service.UserService;
@@ -45,6 +51,12 @@ public class AppController {
 	StoreService storeService;
 	
 	@Autowired
+	ActivtiesService activityService;
+	
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
 	UserProfileService userProfileService;
 	
 	@Autowired
@@ -58,6 +70,10 @@ public class AppController {
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		List<Activity> activities = activityService.findAllActivitiesByDate(todayDate);
+		model.addAttribute("activities", activities);
+		model.addAttribute("loggedinuser", getPrincipal());
 		return "home";
 	}
 
@@ -88,6 +104,10 @@ public class AppController {
 	 */
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(ModelMap model) {
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		List<Activity> activities = activityService.findAllActivitiesByDate(todayDate);
+		model.addAttribute("activities", activities);
+		
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "home";
 	}
@@ -103,6 +123,93 @@ public class AppController {
 		return "storelist";
 	}
 	
+	/**
+	 * This method will list all activities created today.
+	 */
+	@RequestMapping(value = { "/activityList" }, method = RequestMethod.GET)
+	public String listActivities(ModelMap model) {
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		List<Activity> activities = activityService.findAllActivities();
+		model.addAttribute("activities", activities);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "activityList";
+	}
+	
+	/**
+	 * This method will list all activities created today.
+	 */
+	@RequestMapping(value = { "/customerList" }, method = RequestMethod.GET)
+	public String listCustomer(ModelMap model) {
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers", customers);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "customerList";
+	}
+	/**
+	 * This method will be called on form submission, handling POST request for
+	 * saving user in database. It also validates the user input
+	 */
+	@RequestMapping(value = { "/newActivity" }, method = RequestMethod.POST)
+	public String saveActivity(@Valid Activity activity, BindingResult result,
+			ModelMap model) {
+
+		if (result.hasErrors()) {
+			return "addactivity";
+		}
+
+		activityService.saveActivity(activity);
+
+		model.addAttribute("success", "Activity For customer " + activity.getCustId() +" saved successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addactivitysuccess";
+	}
+	
+	/**
+	 * This method will provide the medium to add a new user.
+	 */
+	@RequestMapping(value = { "/newCustomer" }, method = RequestMethod.GET)
+	public String newCustomer(ModelMap model) {
+		Customer customer = new Customer();
+		model.addAttribute("customer", customer);
+		model.addAttribute("edit", false);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addcustomer";
+	}
+	
+	/**
+	 * This method will be called on form submission, handling POST request for
+	 * saving user in database. It also validates the user input
+	 */
+	@RequestMapping(value = { "/newCustomer" }, method = RequestMethod.POST)
+	public String saveCustomer(@Valid Customer customer, BindingResult result,
+			ModelMap model) {
+
+		if (result.hasErrors()) {
+			return "addcustomer";
+		}
+
+		customerService.saveCustomer(customer);
+
+		model.addAttribute("success", "Customer " + customer.getFirstName() +" saved successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addcustomersuccess";
+	}
+	
+	/**
+	 * This method will provide the medium to add a new user.
+	 */
+	@RequestMapping(value = { "/newActivity" }, method = RequestMethod.GET)
+	public String newActivity(ModelMap model) {
+		Activity activity = new Activity();
+		model.addAttribute("activity", activity);
+		model.addAttribute("edit", false);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers", customers);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addactivity";
+	}
 	/**
 	 * This method will provide the medium to add a new user.
 	 */

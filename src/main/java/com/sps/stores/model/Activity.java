@@ -1,7 +1,5 @@
 package com.sps.stores.model;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +21,7 @@ public class Activity {
 	private int custId;
 	
 	@Column(name="CREATE_DATE",nullable=false)
-	private Date activityCreateDate;
+	private String activityCreateDate;
 	
 	@Column(name="ACT_TYP",nullable=false)
 	private String activityType;
@@ -54,11 +52,11 @@ public class Activity {
 		this.custId = custId;
 	}
 
-	public Date getActivityCreateDate() {
+	public String getActivityCreateDate() {
 		return activityCreateDate;
 	}
 
-	public void setActivityCreateDate(Date activityCreateDate) {
+	public void setActivityCreateDate(String activityCreateDate) {
 		this.activityCreateDate = activityCreateDate;
 	}
 
@@ -139,6 +137,14 @@ public class Activity {
 	public String toString() {
 		return "Activity [id=" + id + ", custId=" + custId + ", activityCreateDate=" + activityCreateDate
 				+ ", activityType=" + activityType + ", memo=" + memo + ", amount=" + amount + "]";
+	}
+
+	public Customer getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Customer owner) {
+		this.owner = owner;
 	}
 	
 	

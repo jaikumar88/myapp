@@ -35,6 +35,36 @@
        <put-attribute name="body" value="/WEB-INF/views/pages/userlist.jsp" />  
    </definition>  
    
+   <definition name="activityList" extends="base-definition">  
+       <put-attribute name="title" value="User List" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/home.jsp" />  
+   </definition> 
+   
+   <definition name="addactivity" extends="base-definition">  
+       <put-attribute name="title" value="Add New Activity" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/addactivity.jsp" />  
+   </definition>  
+   
+   <definition name="addactivitysuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New Activity Success" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/addactivitysuccess.jsp" />  
+   </definition> 
+   
+   <definition name="customerList" extends="base-definition">  
+       <put-attribute name="title" value="Customer List" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/customerlist.jsp" />  
+   </definition> 
+   
+   <definition name="addcustomer" extends="base-definition">  
+       <put-attribute name="title" value="Add New Customer" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/addcustomer.jsp" />  
+   </definition>  
+   
+   <definition name="addcustomersuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New Customer Success" />  
+       <put-attribute name="body" value="/WEB-INF/views/pages/addcustomersuccess.jsp" />  
+   </definition> 
+   
     <!-- Add new store Page -->
    <definition name="addstore" extends="base-definition">  
        <put-attribute name="title" value="Add New Store" />  

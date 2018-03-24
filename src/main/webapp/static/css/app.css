@@ -1,5 +1,5 @@
 html{
-	background-color:#a995d0;
+	background-color:#FFFFFF;
 }
 
 body{
@@ -73,7 +73,7 @@ body{
 #sidemenu #menu li a {
     text-decoration: none;
     ##text-transform: uppercase;
-    color: #fff;
+    color: #00000;
 }
 
 #sidemenu #menu li:active{
