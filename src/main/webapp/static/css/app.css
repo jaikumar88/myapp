@@ -102,4 +102,21 @@ body{
     margin-left:20%;
     padding-left:10px;
 }
+
+.login-container {
+    margin-top: 100px;
+    background-color: floralwhite;
+    width: 40%;
+    left: 30%;
+    position: absolute;
+}
+
+.login-card {
+    width: 80%;
+    margin: auto;
+}
+
+.login-form {
+    padding: 10%;
+}
     
