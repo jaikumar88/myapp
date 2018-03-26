@@ -20,4 +20,6 @@ public interface ActivityDao {
 	List<Activity>  findAllActivitiesByDate(String date);
 	
 	void delete(Activity activity);
+	
+	List<Activity> findAllActivities(String location,String custId, String date);
 }

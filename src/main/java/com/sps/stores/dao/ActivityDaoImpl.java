@@ -68,4 +68,19 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 		delete(activity);
 	}
 
+	@Override
+	public List<Activity> findAllActivities(String location, String custId, String date) {
+		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
+		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		//criteria.add(Restrictions.eq("location", location));
+		if(custId != null)
+		criteria.add(Restrictions.eq("custId", Integer.parseInt(custId)));
+		//criteria.add(Restrictions.gt("activityCreateDate", date));
+		List<Activity> activities = (List<Activity>) criteria.list();
+		for(Activity activity : activities){
+			Hibernate.initialize(activity.getOwner());
+		}
+		return activities;
+	}
+
 }

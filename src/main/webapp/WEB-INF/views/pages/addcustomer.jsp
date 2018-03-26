@@ -74,7 +74,12 @@
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="location">Location </label>
 					<div class="col-md-7">
-						<form:input type="text" path="location" id="location" class="form-control input-sm" />
+						<select onchange="myFun(this)" name="location" id="location">
+						<option value="">----Select----</option>
+						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
+							<option value="${loc.location}">${loc.location}</option>
+						</c:forEach>
+					   </select>
 						<div class="has-error">
 							<form:errors path="location" class="help-inline"/>
 						</div>

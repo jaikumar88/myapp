@@ -28,11 +28,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
+import com.sps.stores.model.Location;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.User;
 import com.sps.stores.model.UserProfile;
 import com.sps.stores.service.ActivtiesService;
 import com.sps.stores.service.CustomerService;
+import com.sps.stores.service.LocationService;
 import com.sps.stores.service.StoreService;
 import com.sps.stores.service.UserProfileService;
 import com.sps.stores.service.UserService;
@@ -55,6 +57,9 @@ public class AppController {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	LocationService locationService;
 	
 	@Autowired
 	UserProfileService userProfileService;
@@ -126,12 +131,19 @@ public class AppController {
 	/**
 	 * This method will list all activities created today.
 	 */
-	@RequestMapping(value = { "/activityList" }, method = RequestMethod.GET)
-	public String listActivities(ModelMap model) {
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		List<Activity> activities = activityService.findAllActivities();
+	@RequestMapping(value = { "/activityList" }, method = {RequestMethod.POST,RequestMethod.GET})
+	public String listActivities(ModelMap model,HttpServletRequest request) {
+		String custId = request.getParameter("custId");
+		String locId = request.getParameter("locId");
+		List<Activity> activities = activityService.findAllActivities(locId, custId, "");
 		model.addAttribute("activities", activities);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers",customers);
 		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("custId",custId);
+		model.addAttribute("locId",locId);
 		return "activityList";
 	}
 	
@@ -174,6 +186,8 @@ public class AppController {
 		Customer customer = new Customer();
 		model.addAttribute("customer", customer);
 		model.addAttribute("edit", false);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addcustomer";
 	}
@@ -295,7 +309,21 @@ public class AppController {
 		return "registrationsuccess";
 	}
 
+	
 
+	/**
+	 * This method will provide the medium to update an existing user.
+	 */
+	@RequestMapping(value = { "/edit-activity-{id}" }, method = RequestMethod.GET)
+	public String editActivity(@PathVariable String id, ModelMap model) {
+		Activity activity = activityService.findById(Integer.parseInt(id));
+		model.addAttribute("activity", activity);
+		model.addAttribute("edit", true);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers", customers);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addactivity";
+	}
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */

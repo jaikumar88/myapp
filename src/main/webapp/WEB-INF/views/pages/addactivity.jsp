@@ -36,7 +36,7 @@
 				</div>
 			</div>
 	
-		<div class="row">
+		  <div class="row">
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="activityCreateDate">Creation Date(YYYY-MM-dd)</label>
 					<div class="col-md-7">
@@ -56,6 +56,7 @@
 					 <select name="activityType" id="activityType">
 					    <option value="Payment">Payment</option>
 					    <option value="Advance">Advance</option>
+					    <option value="Received">Received</option>
 					  </select>
 						<div class="has-error">
 							<form:errors path="activityType" class="help-inline"/>
@@ -64,6 +65,28 @@
 				</div>
 			</div>
 	
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="intrestrate">Intrest Rate(%)</label>
+					<div class="col-md-7">
+						<form:input type="text" path="intrestrate" id="intrestrate" class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="intrestrate" class="help-inline"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="status">Status</label>
+					<div class="col-md-7">
+						<form:input type="text" path="status" id="status" class="form-control input-sm" />
+						<div class="has-error">
+							<form:errors path="status" class="help-inline"/>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="memo">Details </label>

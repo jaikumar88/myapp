@@ -19,4 +19,6 @@ public interface ActivtiesService {
 	List<Activity> findAllActivities(); 
 	
 	List<Activity> findAllActivitiesByDate(String date); 
+	
+	List<Activity> findAllActivities(String location,String custId, String date);
 }
