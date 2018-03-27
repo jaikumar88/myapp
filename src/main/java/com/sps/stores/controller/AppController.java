@@ -40,7 +40,9 @@ import com.sps.stores.service.UserProfileService;
 import com.sps.stores.service.UserService;
 
 
-
+/**
+ * 
+ */
 @Controller
 @RequestMapping("/")
 @SessionAttributes("roles")
@@ -136,6 +138,10 @@ public class AppController {
 		String custId = request.getParameter("custId");
 		String locId = request.getParameter("locId");
 		List<Activity> activities = activityService.findAllActivities(locId, custId, "");
+		if(activities!= null && !activities.isEmpty()){
+		model.addAttribute("total",activities.get(activities.size()-1).getTotalAmount());
+		model.addAttribute("totalIntrest",activities.get(activities.size()-1).getTotalIntrest());
+		}
 		model.addAttribute("activities", activities);
 		List<Location> locations = locationService.findAllLocations();
 		model.addAttribute("locations",locations);
@@ -221,6 +227,9 @@ public class AppController {
 		model.addAttribute("edit", false);
 		List<Customer> customers = customerService.findAllCustomers();
 		model.addAttribute("customers", customers);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
+		
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addactivity";
 	}
@@ -263,6 +272,44 @@ public class AppController {
 		return "addstoresuccess";
 	}
 	
+	/**
+	 * This method will provide the medium to add a new user.
+	 */
+	@RequestMapping(value = { "/newLocation" }, method = RequestMethod.GET)
+	public String newLocation(ModelMap model) {
+		Location location = new Location();
+		model.addAttribute("location", location);
+		model.addAttribute("edit", false);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addlocation";
+	}
+	
+	/**
+	 * This method will be called on form submission, handling POST request for
+	 * saving user in database. It also validates the user input
+	 */
+	@RequestMapping(value = { "/newLocation" }, method = RequestMethod.POST)
+	public String saveLocation(@Valid Location location, BindingResult result,
+			ModelMap model) {
+
+		if (result.hasErrors()) {
+			return "addlocation";
+		}
+
+		if(locationService.isLocationUnique(location.getLocation())){
+			FieldError ssoError =new FieldError("location","id",messageSource.getMessage("non.unique.locId", new String[]{location.getLocation()}, Locale.getDefault()));
+		    result.addError(ssoError);
+			return "addlocation";
+		}
+		
+		
+		locationService.saveLocation(location);
+
+		model.addAttribute("success", "Location " + location.getLocation() +" saved successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addstoresuccess";
+	}
 	/**
 	 * This method will provide the medium to add a new user.
 	 */

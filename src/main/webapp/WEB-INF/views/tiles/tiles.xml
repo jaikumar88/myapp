@@ -74,6 +74,18 @@
        <put-attribute name="body" value="/WEB-INF/views/pages/addcustomersuccess.jsp" />  
    </definition> 
    
+      <definition name="addlocation" extends="base-definition">  
+       <put-attribute name="title" value="Add New Customer" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addlocation.jsp" />  
+   </definition>  
+   
+   <definition name="addlocationsuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New Customer Success" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addlocationsuccess.jsp" />  
+   </definition> 
+   
     <!-- Add new store Page -->
    <definition name="addstore" extends="base-definition">  
        <put-attribute name="title" value="Add New Store" />  

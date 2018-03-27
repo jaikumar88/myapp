@@ -64,10 +64,14 @@ public class CustomerServiceImpl implements CustomerService {
 			double dueAmount = 0.00;
 			for(Activity activity:activityDao.findAllActivities("", String.valueOf(customer.getId()), ""))
 			{
-			if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase("Payment"))
+			if(activity.getActivityCreateDate() != null && activity.getAmount() != null)
 			{
+				if(activity.getActivityType().equalsIgnoreCase("Payment") || activity.getActivityType().equalsIgnoreCase("Advance"))
 				dueAmount += Double.parseDouble(activity.getAmount()) + Double.parseDouble(appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate()));
-			}
+				else if(activity.getActivityType().equalsIgnoreCase("Received")){
+					dueAmount -= Double.parseDouble(activity.getAmount());
+				}
+			} 
 			}
 			customer.setDueAmount(String.valueOf(dueAmount));
 		}

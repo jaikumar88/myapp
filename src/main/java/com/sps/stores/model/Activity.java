@@ -39,6 +39,9 @@ public class Activity {
 	@Column(name="AMOUNT",nullable=false)
 	private String amount;
 	
+	@Column(name="CLOSE_DATE",nullable=false)
+	private String closingDate;
+	
 	@Column(name="TS_CRT",nullable=true)
 	private String creationDate;
 	
@@ -50,7 +53,12 @@ public class Activity {
 	private Customer owner;
 	
 	@Transient
-	private String dueAmount;
+	private String intrestAmount;
+	
+	@Transient
+	private String totalAmount;
+	@Transient
+	private String totalIntrest;
 	
 	public int getId() {
 		return id;
@@ -229,13 +237,62 @@ public class Activity {
 				+ ", owner=" + owner + "]";
 	}
 
-	public String getDueAmount() {
-		
-		return dueAmount;
+	
+
+	/**
+	 * @return the closingDate
+	 */
+	public String getClosingDate() {
+		return closingDate;
 	}
 
-	public void setDueAmount(String dueAmount) {
-		this.dueAmount = dueAmount;
+	/**
+	 * @param closingDate the closingDate to set
+	 */
+	public void setClosingDate(String closingDate) {
+		this.closingDate = closingDate;
+	}
+
+	/**
+	 * @return the intrestAmount
+	 */
+	public String getIntrestAmount() {
+		return intrestAmount;
+	}
+
+	/**
+	 * @param intrestAmount the intrestAmount to set
+	 */
+	public void setIntrestAmount(String intrestAmount) {
+		this.intrestAmount = intrestAmount;
+	}
+
+	/**
+	 * @return the totalAmount
+	 */
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+
+	/**
+	 * @param totalAmount the totalAmount to set
+	 */
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	/**
+	 * @return the totalIntrest
+	 */
+	public String getTotalIntrest() {
+		return totalIntrest;
+	}
+
+	/**
+	 * @param totalIntrest the totalIntrest to set
+	 */
+	public void setTotalIntrest(String totalIntrest) {
+		this.totalIntrest = totalIntrest;
 	}
 	
 	

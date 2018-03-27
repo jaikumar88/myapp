@@ -50,7 +50,7 @@ function myFun(loc_id){
 <div>
   <form:form method="POST"  class="form-horizontal">
 		<div id="selectDiv">  Select the Location name and customer name </div>
-	
+		
 					<select onchange="myFun(this)" name="locId" id="locId">
 						<option value="">----Select----</option>
 						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
@@ -73,12 +73,13 @@ function myFun(loc_id){
 				        <th>Activity Type </th>
 				        <th>Details </th>
 				        <th>Amount </th>
-				        <th>Intrest Amount Today </th>
+				        <th>Intrest</th>
+				        <th> Status </th>
 				        <sec:authorize access="hasRole('ADMIN')">
-				        	<th ></th>
+				        	<th >Edit </th>
 				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
-				        	<th ></th>
+				        	<th >Delete</th>
 				        </sec:authorize>
 				        
 					</tr>
@@ -92,7 +93,9 @@ function myFun(loc_id){
 						<td>${activity.activityType}</td>
 						<td>${activity.memo}</td>
 						<td>${activity.amount}</td>
-					    <td>${activity.dueAmount}</td>
+					    <td>${activity.intrestAmount}</td>
+					     <td>${activity.status}</td>
+					     
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/edit-activity-${activity.id}' />" >edit</a></td>
 				        </sec:authorize>
@@ -101,6 +104,13 @@ function myFun(loc_id){
         				</sec:authorize>
 					</tr>
 				</c:forEach>
+				  <tr>  <td> Total Due </td>
+				  		<td>${total}</td>
+						<td>Total Intrest </td>
+						<td>${totalIntrest}</td>
+						<td></td>
+					    <td></td>
+					     <td></td>
 	    		</tbody>
 	    	</table>
 			<c:if test="${empty pageStart or pageStart < 0}">

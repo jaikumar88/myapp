@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
+import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.dao.ActivityDao;
 import com.sps.stores.model.Activity;
 
@@ -53,10 +54,17 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 	@Override
 	public List<Activity> findAllActivities() {
 		List<Activity> listActivity = activityDao.findAllActivities();
+		double totInterest = 0.00;
+		double totdueAmount  = 0.00;
 		for(Activity activity:listActivity){
-			if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase("Payment"))
+			if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()))
 			{
-				activity.setDueAmount(appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate()));
+				String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+				totInterest += Double.valueOf(intrestAmt);
+				totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount());
+				activity.setIntrestAmount(intrestAmt);
+				activity.setTotalIntrest(String.valueOf(totInterest));
+				activity.setTotalAmount(String.valueOf(totdueAmount));
 			}
 		}
 		return listActivity;
@@ -74,13 +82,20 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 	@Override
 	public List<Activity> findAllActivities(String location, String custId, String date) {
 		List<Activity> listActivity = new ArrayList<>();
+		double totInterest = 0.00;
+		double totdueAmount  = 0.00;
 		if(custId!= null )
 		{
 			listActivity = activityDao.findAllActivities(location, custId, date);
 			for(Activity activity:listActivity){
-				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase("Payment"))
+				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()))
 				{
-					activity.setDueAmount(appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate()));
+					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+					totInterest += Double.valueOf(intrestAmt);
+					totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount());
+					activity.setIntrestAmount(intrestAmt);
+					activity.setTotalIntrest(String.valueOf(totInterest));
+					activity.setTotalAmount(String.valueOf(totdueAmount));
 				}
 			}
 		return listActivity;

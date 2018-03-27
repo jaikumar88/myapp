@@ -14,6 +14,8 @@ public interface LocationService {
 	
 	void deleteLocationById(String id);
 
-	List<Location> findAllLocations(); 
+	List<Location> findAllLocations();
+
+	boolean isLocationUnique(String location); 
 
 }

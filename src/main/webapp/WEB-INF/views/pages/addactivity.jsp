@@ -10,25 +10,80 @@
 	<title>Add Store Form</title>
 	<link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
 	<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
+	
+	<script type="text/javascript">
+
+function myFun(loc_id){
+	 customerList = new Array();
+	var i = 0;
+	var j = 0;
+	var myDiv = document.getElementById("selectDiv");
+	var loc_id = document.getElementById("locId").value;
+	document.getElementById("custId").innerHTML = "";
+	var select = document.getElementById("custId");
+	
+	var option = document.createElement("option");
+    option.value = "";
+    option.text = "-----Select----";
+    select.appendChild(option);
+	//alert(loc_id)
+	<c:forEach var="customer" items='${customers}'>
+	//alert("${customer.location}")alert("${customer.location == loc_id}")
+    if (("${customer.location}" == loc_id))
+    	{
+    	//customerList[i++] = "${customer}";
+    	
+    	var option = document.createElement("option");
+        option.value = "${customer.id}";
+        option.text = "${customer.firstName}" + "${customer.lastName}";
+        select.appendChild(option);
+    	}
+  </c:forEach>
+  
+  
+}
+</script>
 </head>
 
 <body>
  	<div class="generic-container">
 		
+		
 
 		<div class="well lead">Add New Activity</div>
+		
+		<div class="none"> </div>
 	 	<form:form method="POST" modelAttribute="activity" class="form-horizontal">
 			<form:input type="hidden" path="id" id="id"/>
+
 			
-			<div class="row">
 				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="custId">Customer Name</label>
+					<label class="col-md-3 control-lable" for="locId">Location: </label>
 					<div class="col-md-7">
-					<select name="custId" id="custId">
-						<c:forEach items="${customers}" var="cust" varStatus="letterCounter">
-						<option value="${cust.id}">${cust.firstName} ${cust.lastName}</option>
+						<select onchange="myFun(this)" name="locId" id="locId">
+						<option value="">----Select----</option>
+						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
+							<option value="${loc.location}" ${loc.location == locId ? 'selected="selected"' : ''}>${loc.location}</option>
 						</c:forEach>
-					</select>
+					    </select>
+						<div class="has-error">
+							<form:errors path="custId" class="help-inline"/>
+						</div>
+					</div>
+				</div>
+					
+		
+		
+		   <div class="row" id="selectDiv">
+				<div class="form-group col-md-12">
+					<label class="col-md-3 control-lable" for="custId">Customer:</label>
+					<div class="col-md-7">
+						<select name="custId" id="custId">
+					    <option value="">Select</option>
+						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
+							<option value="${cust.id}">${cust.firstName}</option>
+						</c:forEach>
+						</select>
 						<div class="has-error">
 							<form:errors path="custId" class="help-inline"/>
 						</div>
@@ -80,7 +135,10 @@
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="status">Status</label>
 					<div class="col-md-7">
-						<form:input type="text" path="status" id="status" class="form-control input-sm" />
+						<select name="status" id="status">
+					    <option value="Open">Payment</option>
+					    <option value="Close">Advance</option>
+					  </select>
 						<div class="has-error">
 							<form:errors path="status" class="help-inline"/>
 						</div>

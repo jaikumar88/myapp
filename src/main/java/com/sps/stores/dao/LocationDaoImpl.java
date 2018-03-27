@@ -18,7 +18,7 @@ public class LocationDaoImpl extends AbstractDao<Integer, Location> implements L
 
 	@Override
 	public void save(Location location) {
-		save(location);
+		persist(location);
 		
 	}
 

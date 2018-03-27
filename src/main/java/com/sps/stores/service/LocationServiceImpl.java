@@ -28,7 +28,7 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public void saveLocation(Location location) {
-		// TODO Auto-generated method stub
+		locationDao.save(location);
 		
 	}
 
@@ -46,8 +46,18 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public List<Location> findAllLocations() {
-		// TODO Auto-generated method stub
+	
 		return locationDao.findAllLocations();
+	}
+
+	@Override
+	public boolean isLocationUnique(String location) {
+		
+		for(Location loc: locationDao.findAllLocations()){
+			if(loc.getLocation().equalsIgnoreCase(location))
+				return true;
+		}
+		return false;
 	}
 	
 }
