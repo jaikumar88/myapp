@@ -134,6 +134,7 @@
 		    <artifactId>jstl</artifactId>
 		    <version>1.2</version>
 		</dependency>
+		<!--  
 		<dependency>
         <groupId>com.oracle</groupId>
         <artifactId>ojdbc6</artifactId>
@@ -141,6 +142,7 @@
         <scope>system</scope>
         <systemPath>${project.basedir}/lib/ojdbc6/ojdbc6.jar</systemPath>
         </dependency> 
+        -->
 		<dependency>
 		    <groupId>com.microsoft.sqlserver</groupId>
 		    <artifactId>mssql-jdbc</artifactId>
