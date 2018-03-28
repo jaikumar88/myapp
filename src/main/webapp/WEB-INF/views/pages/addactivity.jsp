@@ -136,8 +136,8 @@ function myFun(loc_id){
 					<label class="col-md-3 control-lable" for="status">Status</label>
 					<div class="col-md-7">
 						<select name="status" id="status">
-					    <option value="Open">Payment</option>
-					    <option value="Close">Advance</option>
+					    <option value="Open">Open</option>
+					    <option value="Close">Close</option>
 					  </select>
 						<div class="has-error">
 							<form:errors path="status" class="help-inline"/>
