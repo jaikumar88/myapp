@@ -42,7 +42,9 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 
 	@Override
 	public void updateActivity(Activity activity) {
-		activityDao.save(activity);
+		Activity entity = activityDao.findById(activity.getId());
+		entity.setStatus(activity.getStatus());
+		entity.setClosingDate(activity.getClosingDate());
 
 	}
 
@@ -54,20 +56,8 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 	@Override
 	public List<Activity> findAllActivities() {
 		List<Activity> listActivity = activityDao.findAllActivities();
-		double totInterest = 0.00;
-		double totdueAmount  = 0.00;
-		for(Activity activity:listActivity){
-			if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()))
-			{
-				String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
-				totInterest += Double.valueOf(intrestAmt);
-				totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount());
-				activity.setIntrestAmount(intrestAmt);
-				activity.setTotalIntrest(String.valueOf(totInterest));
-				activity.setTotalAmount(String.valueOf(totdueAmount));
-			}
-		}
-		return listActivity;
+		
+		return calculateTotalAndDueAmount( listActivity);
 	}
 
 	@Override
@@ -81,27 +71,43 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 	 */
 	@Override
 	public List<Activity> findAllActivities(String location, String custId, String date) {
-		List<Activity> listActivity = new ArrayList<>();
+		List<Activity> listActivity = activityDao.findAllActivities(location, custId, date);
+		return calculateTotalAndDueAmount( listActivity);
+	}
+
+	/**
+	 * @param custId
+	 * @param listActivity
+	 * @return
+	 */
+	private List<Activity> calculateTotalAndDueAmount(List<Activity> listActivity) {
 		double totInterest = 0.00;
 		double totdueAmount  = 0.00;
-		if(custId!= null )
-		{
-			listActivity = activityDao.findAllActivities(location, custId, date);
+		
 			for(Activity activity:listActivity){
-				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()))
+				if(activity.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
+				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && 
+						(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()) || 
+						activity.getActivityType().equalsIgnoreCase(ApplicationConstants.ADVANCE.value())))
 				{
 					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
 					totInterest += Double.valueOf(intrestAmt);
-					totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount());
+					totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
 					activity.setIntrestAmount(intrestAmt);
-					activity.setTotalIntrest(String.valueOf(totInterest));
-					activity.setTotalAmount(String.valueOf(totdueAmount));
+					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
+					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
+					}
+				} else if(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.RECEIVED.value())){
+					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+					totInterest -= Double.valueOf(intrestAmt);
+					totdueAmount -= Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
+					activity.setIntrestAmount(intrestAmt);
+					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
+					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
 				}
 			}
 		return listActivity;
-		}
-		else 
-			return listActivity;
+		
 	}
 
 }

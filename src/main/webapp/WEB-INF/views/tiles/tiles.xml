@@ -55,6 +55,23 @@
        <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
        <put-attribute name="body" value="/WEB-INF/views/pages/addactivitysuccess.jsp" />  
    </definition> 
+    <definition name="addtransaction" extends="base-definition">  
+       <put-attribute name="title" value="Add New Transaction" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addtransaction.jsp" />  
+   </definition>  
+   
+     <definition name="transactionList" extends="base-definition">  
+       <put-attribute name="title" value="Transactions List" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/listtransactions.jsp" />  
+   </definition> 
+   
+   <definition name="addtransactionsuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New transaction Success" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addtransactionsuccess.jsp" />  
+   </definition> 
    
    <definition name="customerList" extends="base-definition">  
        <put-attribute name="title" value="Customer List" />  
@@ -99,6 +116,20 @@
        <put-attribute name="body" value="/WEB-INF/views/pages/addstoresuccess.jsp" />  
    </definition> 
    
+    <!-- closeConfirmation Page -->
+   <definition name="closeConfirmation" extends="base-definition">  
+       <put-attribute name="title" value="Check close confirmation" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/closeconfirmation.jsp" />  
+   </definition> 
+   
+    <!-- listactivities Page -->
+   <definition name="listactivities" extends="base-definition">  
+       <put-attribute name="title" value="List Open Activity" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/listactivity.jsp" />  
+   </definition> 
+   
    
       <!-- Add new user Page -->
    <definition name="registration" extends="base-definition">  
@@ -125,5 +156,7 @@
        <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" /> 
        <put-attribute name="body" value="/WEB-INF/views/pages/contactus.jsp" />  
    </definition>  
+   
+   
  
 </tiles-definitions>

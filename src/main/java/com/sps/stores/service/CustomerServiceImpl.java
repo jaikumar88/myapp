@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
+import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.dao.ActivityDao;
 import com.sps.stores.dao.CustomerDao;
 import com.sps.stores.model.Activity;
@@ -61,28 +62,57 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Customer> listCust = customerDao.findAllCustomers();
 		
 		for(Customer customer:listCust){
-			double dueAmount = 0.00;
-			for(Activity activity:activityDao.findAllActivities("", String.valueOf(customer.getId()), ""))
-			{
-			if(activity.getActivityCreateDate() != null && activity.getAmount() != null)
-			{
-				if(activity.getActivityType().equalsIgnoreCase("Payment") || activity.getActivityType().equalsIgnoreCase("Advance"))
-				dueAmount += Double.parseDouble(activity.getAmount()) + Double.parseDouble(appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate()));
-				else if(activity.getActivityType().equalsIgnoreCase("Received")){
-					dueAmount -= Double.parseDouble(activity.getAmount());
-				}
-			} 
-			}
-			customer.setDueAmount(String.valueOf(dueAmount));
+			double dueAmount = calculateTotalDueAmount(activityDao.findAllActivities("", String.valueOf(customer.getId()), ""));
+			customer.setDueAmount(String.valueOf(appUtil.formatDouble(dueAmount)));
 		}
 		return listCust;
+		
+	}
+	
+	/**
+	 * @param custId
+	 * @param listActivity
+	 * @return
+	 */
+	private double calculateTotalDueAmount(List<Activity> listActivity) {
+		double totInterest = 0.00;
+		double totdueAmount  = 0.00;
+		
+			for(Activity activity:listActivity){
+				if(activity.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
+				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && 
+						(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()) || 
+						activity.getActivityType().equalsIgnoreCase(ApplicationConstants.ADVANCE.value())))
+				{
+					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+					totInterest += Double.valueOf(intrestAmt);
+					totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
+					activity.setIntrestAmount(intrestAmt);
+					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
+					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
+					}
+				} else if(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.RECEIVED.value())){
+					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+					totInterest -= Double.valueOf(intrestAmt);
+					totdueAmount -= Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
+					activity.setIntrestAmount(intrestAmt);
+					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
+					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
+				}
+			}
+		return totdueAmount;
 		
 	}
 
 	@Override
 	public List<Customer> findAllCustomer(String location) {
 		// TODO Auto-generated method stub
-		return null;
+		return customerDao.findAllCustomersByLocation(location);
+	}
+
+	@Override
+	public List<Customer> findAllCustomersList() {
+		return customerDao.findAllCustomers();
 	}
 
 	

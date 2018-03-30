@@ -46,6 +46,7 @@ function myFun(loc_id){
 </head>
 
 <body>
+<div  class="well">
  	<div class="generic-container">
 		
 		
@@ -182,6 +183,7 @@ function myFun(loc_id){
 				</div>
 			</div>
 		</form:form>
+	</div>
 	</div>
 </body>
 </html>

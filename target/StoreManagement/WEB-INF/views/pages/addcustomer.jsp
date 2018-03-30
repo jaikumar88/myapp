@@ -13,6 +13,7 @@
 </head>
 
 <body>
+<div  class="well">
  	<div class="generic-container">
 		
 
@@ -74,7 +75,12 @@
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="location">Location </label>
 					<div class="col-md-7">
-						<form:input type="text" path="location" id="location" class="form-control input-sm" />
+						<select onchange="myFun(this)" name="location" id="location">
+						<option value="">----Select----</option>
+						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
+							<option value="${loc.location}">${loc.location}</option>
+						</c:forEach>
+					   </select>
 						<div class="has-error">
 							<form:errors path="location" class="help-inline"/>
 						</div>
@@ -108,15 +114,16 @@
 				<div class="form-actions floatRight">
 					<c:choose>
 						<c:when test="${edit}">
-							<input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/listCustomer' />">Cancel</a>
+							<input type="submit" value="Update" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/customerList' />">Cancel</a>
 						</c:when>
 						<c:otherwise>
-							<input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/listCustomer' />">Cancel</a>
+							<input type="submit" value="Register" class="btn btn-primary btn-sm"/> or <a href="<c:url value='/customerList' />">Cancel</a>
 						</c:otherwise>
 					</c:choose>
 				</div>
 			</div>
 		</form:form>
+	</div>
 	</div>
 </body>
 </html>

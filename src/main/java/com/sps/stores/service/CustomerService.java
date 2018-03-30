@@ -18,5 +18,7 @@ public interface CustomerService {
 
 	List<Customer> findAllCustomers(); 
 	
+	List<Customer> findAllCustomersList(); 
+	
 	List<Customer> findAllCustomer(String location); 
 }

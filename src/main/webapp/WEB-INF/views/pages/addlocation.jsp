@@ -15,6 +15,7 @@
 </head>
 
 <body>
+<div  class="well">
  	<div class="generic-container">
 		
 		
@@ -49,6 +50,7 @@
 				</div>
 			</div>
 		</form:form>
+	</div>
 	</div>
 </body>
 </html>

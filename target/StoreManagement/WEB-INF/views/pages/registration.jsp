@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
- 	<div class="generic-container">
+ 	<div  class="well">
 	
 
 		<div class="well lead">User Registration Form</div>

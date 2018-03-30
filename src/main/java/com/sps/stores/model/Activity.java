@@ -39,7 +39,7 @@ public class Activity {
 	@Column(name="AMOUNT",nullable=false)
 	private String amount;
 	
-	@Column(name="CLOSE_DATE",nullable=false)
+	@Column(name="CLOSE_DATE",nullable=true)
 	private String closingDate;
 	
 	@Column(name="TS_CRT",nullable=true)

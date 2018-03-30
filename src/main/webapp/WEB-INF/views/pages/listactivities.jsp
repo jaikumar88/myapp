@@ -30,7 +30,7 @@ function myFun(loc_id){
     	
     	var option = document.createElement("option");
         option.value = "${customer.id}";
-        option.text = "${customer.firstName}" + "${customer.lastName}";
+        option.text = "${customer.firstName}" + " ${customer.lastName}";
         select.appendChild(option);
     	}
   </c:forEach>
@@ -47,7 +47,7 @@ function myFun(loc_id){
 <c:set var="pageStart" value="${param.start}"/>
 <c:set var="customerList" scope="session" value="${customerList}"/>
 
-<div>
+<div  class="well">
   <form:form method="POST"  class="form-horizontal">
 		<div id="selectDiv">  Select the Location name and customer name </div>
 		
@@ -60,7 +60,7 @@ function myFun(loc_id){
 					<select name="custId" id="custId">
 					    <option value="">Select</option>
 						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
-							<option value="${cust.id}" ${cust.id == custId ? 'selected="selected"' : ''}>${cust.firstName}</option>
+							<option value="${cust.id}" ${cust.id == custId ? 'selected="selected"' : ''}>${cust.firstName} ${cust.lastName}</option>
 						</c:forEach>
 					</select>
 					<input type="submit" value="listActivity" class="btn btn-primary btn-sm"/>
@@ -75,6 +75,9 @@ function myFun(loc_id){
 				        <th>Amount </th>
 				        <th>Intrest</th>
 				        <th> Status </th>
+				        <sec:authorize access="hasRole('ADMIN')">
+				        	<th >Close </th>
+				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
 				        	<th >Edit </th>
 				        </sec:authorize>
@@ -95,7 +98,9 @@ function myFun(loc_id){
 						<td>${activity.amount}</td>
 					    <td>${activity.intrestAmount}</td>
 					     <td>${activity.status}</td>
-					     
+					     <sec:authorize access="hasRole('USER') or hasRole('ADMIN')">
+							<td><a href="<c:url value='/closeActivity-${activity.id}' />" class="btn btn-success custom-width">Close</a></td>
+				        </sec:authorize>
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/edit-activity-${activity.id}' />" >edit</a></td>
 				        </sec:authorize>
@@ -110,6 +115,8 @@ function myFun(loc_id){
 						<td>${totalIntrest}</td>
 						<td></td>
 					    <td></td>
+					     <td></td>
+					     <td></td>
 					     <td></td>
 	    		</tbody>
 	    	</table>

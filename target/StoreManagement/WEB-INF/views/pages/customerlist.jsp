@@ -36,10 +36,10 @@
 						<td>${cust.email}</td>
 						<td>${cust.dueAmount}</td>
 					    <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/edit-customer-${cust.Id}' />" >edit</a></td>
+							<td><a href="<c:url value='/edit-customer-${cust.id}' />" >edit</a></td>
 				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/delete-customer-${cust.Id}' />" >delete</a></td>
+							<td><a href="<c:url value='/delete-customer-${cust.id}' />" >delete</a></td>
         				</sec:authorize>
 					</tr>
 				</c:forEach>

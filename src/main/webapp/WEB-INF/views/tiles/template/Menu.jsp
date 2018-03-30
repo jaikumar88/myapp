@@ -7,10 +7,12 @@
 	<ul id="menu">
 		<sec:authorize access="hasRole('ADMIN') or hasRole('USER')">
 		<li><a href="${pageContext.request.contextPath}/">Home</a></li>
+		<li><a href="${pageContext.request.contextPath}/newTransaction">Add Transaction</a></li>
 		<li><a href="${pageContext.request.contextPath}/newActivity">Add Activity</a></li>
 		<li><a href="${pageContext.request.contextPath}/newCustomer">Add Customer</a></li>
 		<li><a href="${pageContext.request.contextPath}/customerList">List Customer</a></li>
 		<li><a href="${pageContext.request.contextPath}/activityList">List Activities</a></li>
+		<li><a href="${pageContext.request.contextPath}/transactionList">List Transactions</a></li>
        	<li><a href="${pageContext.request.contextPath}/storeList">Store List</a></li>
 	   	<li><a href="${pageContext.request.contextPath}/newstore">Add Store</a></li>
 	   	<li><a href="${pageContext.request.contextPath}/newLocation">Add Location</a></li>

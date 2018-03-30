@@ -2,7 +2,7 @@ package com.sps.stores.application;
 
 public enum ApplicationConstants {
 
-	PAYMENT("Payment");
+	PAYMENT("Payment"),ADVANCE("Advance"),RECEIVED("Received"),OPEN("Open"),CLOSE("Close");
 	
 	private String value;
 

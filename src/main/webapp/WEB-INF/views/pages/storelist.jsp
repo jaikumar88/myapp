@@ -9,6 +9,7 @@
 <c:set var="totalCount" scope="session" value="${fn:length(stores)}"/>
 <c:set var="perPage" scope="session"  value="10"/>
 <c:set var="pageStart" value="${param.start}"/>
+<div  class="well">
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>
@@ -51,4 +52,4 @@
 			</c:if>
     		<a href="${pageContext.request.contextPath}/storeList?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
     		<a href="${pageContext.request.contextPath}/storeList?start=${pageStart + 10}">Next</a>  
-
+</div>

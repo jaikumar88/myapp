@@ -9,6 +9,7 @@
 <c:set var="totalCount" scope="session" value="${fn:length(stores)}"/>
 <c:set var="perPage" scope="session"  value="10"/>
 <c:set var="pageStart" value="${param.start}"/>
+<div  class="well">
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>
@@ -44,11 +45,11 @@
 	    		</tbody>
 	    	</table>
 			<c:if test="${empty pageStart or pageStart < 0}">
-       <c:set var="pageStart" value="0"/>
-</c:if>
-<c:if test="${totalCount < pageStart}">
-       <c:set var="pageStart" value="${pageStart - 10}"/>
-</c:if>
-    <a href="${pageContext.request.contextPath}/storeList?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
-    <a href="${pageContext.request.contextPath}/storeList?start=${pageStart + 10}">Next</a>  
-
+       				<c:set var="pageStart" value="0"/>
+			</c:if>
+			<c:if test="${totalCount < pageStart}">
+       			<c:set var="pageStart" value="${pageStart - 10}"/>
+			</c:if>
+    		<a href="${pageContext.request.contextPath}/storeList?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
+    		<a href="${pageContext.request.contextPath}/storeList?start=${pageStart + 10}">Next</a>  
+</div>

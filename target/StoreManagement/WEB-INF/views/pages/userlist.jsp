@@ -5,7 +5,7 @@
 
 
 
-
+<div  class="well">
 			  <!-- Default panel contents -->
 		  	<div class="panel-heading"><span class="lead">List of Users </span></div>
 			<table class="table table-hover">
@@ -42,5 +42,5 @@
 	    		</tbody>
 	    	</table>
 		
-
+</div>
    	

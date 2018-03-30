@@ -1,6 +1,7 @@
 package com.sps.stores.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -26,16 +28,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.sps.stores.application.AppUtil;
+import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Store;
+import com.sps.stores.model.Transaction;
 import com.sps.stores.model.User;
 import com.sps.stores.model.UserProfile;
 import com.sps.stores.service.ActivtiesService;
 import com.sps.stores.service.CustomerService;
 import com.sps.stores.service.LocationService;
 import com.sps.stores.service.StoreService;
+import com.sps.stores.service.TransactionService;
 import com.sps.stores.service.UserProfileService;
 import com.sps.stores.service.UserService;
 
@@ -45,7 +51,7 @@ import com.sps.stores.service.UserService;
  */
 @Controller
 @RequestMapping("/")
-@SessionAttributes("roles")
+@SessionAttributes({"roles"})
 public class AppController {
 
 	@Autowired
@@ -67,6 +73,9 @@ public class AppController {
 	UserProfileService userProfileService;
 	
 	@Autowired
+	TransactionService transactionService;
+	
+	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
@@ -75,11 +84,44 @@ public class AppController {
 	@Autowired
 	AuthenticationTrustResolver authenticationTrustResolver;
 	
+	@Autowired
+	AppUtil appUtil;
+	
+	/**
+	 * Handle request to download an Excel document
+	 */
+	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
+	public Model download(Model model,HttpServletRequest request) {
+		String custId = request.getParameter("custID");
+		String locId = request.getParameter("locID");
+		String transId = request.getParameter("transId");
+		List<Transaction> transactions = new ArrayList<>();
+		if(transId!=null && !"".equalsIgnoreCase(transId)){
+			transactions.add(transactionService.findById(Integer.parseInt(transId)));
+		}else{
+			transactions = transactionService.findAllTransactions(locId, custId, "");
+		}
+	    model.addAttribute("transactions", transactions);
+	    model.addAttribute("custId",custId);
+	    model.addAttribute("FileName",getPrincipal());
+	    return model;
+	}
+	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		List<Activity> activities = activityService.findAllActivitiesByDate(todayDate);
-		model.addAttribute("activities", activities);
+		List<Transaction> transactions = transactionService.findAllTransactionsByDate(todayDate);
+		model.addAttribute("transactions", transactions);
+		double total=0.00;
+		double totalDue= 0.00;
+		for(Transaction trans:transactions){
+			if(trans!=null){
+				total+= "".equalsIgnoreCase(trans.getTotalAmount())?0.00:Double.valueOf(trans.getTotalAmount());
+				totalDue+= "".equalsIgnoreCase(trans.getDueAmount())?0.00:Double.valueOf(trans.getDueAmount());
+			}
+		}
+		model.addAttribute("totals", total);
+		model.addAttribute("totalsDue", totalDue);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "home";
 	}
@@ -112,9 +154,18 @@ public class AppController {
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(ModelMap model) {
 		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		List<Activity> activities = activityService.findAllActivitiesByDate(todayDate);
-		model.addAttribute("activities", activities);
-		
+		List<Transaction> transactions = transactionService.findAllTransactionsByDate(todayDate);
+		model.addAttribute("transactions", transactions);
+		double total=0.00;
+		double totalDue= 0.00;
+		for(Transaction trans:transactions){
+			if(trans!=null){
+				total+= "".equalsIgnoreCase(trans.getTotalAmount())?0.00:Double.valueOf(trans.getTotalAmount());
+				totalDue+= "".equalsIgnoreCase(trans.getDueAmount())?0.00:Double.valueOf(trans.getDueAmount());
+			}
+		}
+		model.addAttribute("totals", total);
+		model.addAttribute("totalsDue", totalDue);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "home";
 	}
@@ -147,12 +198,41 @@ public class AppController {
 		model.addAttribute("locations",locations);
 		List<Customer> customers = customerService.findAllCustomers();
 		model.addAttribute("customers",customers);
+		List<Customer> customerList = customerService.findAllCustomer(locId);
+		model.addAttribute("customerList",customerList);
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("custId",custId);
 		model.addAttribute("locId",locId);
 		return "activityList";
 	}
 	
+	@RequestMapping(value = { "/transactionList" }, method = {RequestMethod.POST,RequestMethod.GET})
+	public String listTransactions(ModelMap model,HttpServletRequest request) {
+		String custId = request.getParameter("custId");
+		String locId = request.getParameter("locId");
+		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, "");
+		model.addAttribute("transactions", transactions);
+		double total=0.00;
+		double totalDue= 0.00;
+		for(Transaction trans:transactions){
+			if(trans!=null){
+				total+= "".equalsIgnoreCase(trans.getTotalAmount())?0.00:Double.valueOf(trans.getTotalAmount());
+				totalDue+= "".equalsIgnoreCase(trans.getDueAmount())?0.00:Double.valueOf(trans.getDueAmount());
+			}
+		}
+		model.addAttribute("totals", total);
+		model.addAttribute("totalsDue", totalDue);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers",customers);
+		List<Customer> customerList = customerService.findAllCustomer(locId);
+		model.addAttribute("customerList",customerList);
+		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("custId",custId);
+		model.addAttribute("locId",locId);
+		return "transactionList";
+	}
 	/**
 	 * This method will list all activities created today.
 	 */
@@ -179,6 +259,33 @@ public class AppController {
 		activityService.saveActivity(activity);
 
 		model.addAttribute("success", "Activity For customer " + activity.getCustId() +" saved successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addactivitysuccess";
+	}
+	
+	@RequestMapping(value = { "/close-activity-{id}" }, method = RequestMethod.GET)
+	public String closeActivity(@PathVariable String id,ModelMap model) {
+		Activity activity = activityService.findById(Integer.parseInt(id));
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		activity.setClosingDate(todayDate);
+		activity.setStatus(ApplicationConstants.CLOSE.value());
+		activityService.updateActivity(activity);
+
+		model.addAttribute("success", "Activity For customer " + activity.getCustId() +" closed successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addactivitysuccess";
+	}
+	@RequestMapping(value = { "/close-now-{id}" }, method = RequestMethod.GET)
+	public String closeTransaction(@PathVariable String id,ModelMap model) {
+		Transaction transaction = transactionService.findById(Integer.parseInt(id));
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		transaction.setCloseDate(todayDate);
+		transaction.setStatus(ApplicationConstants.CLOSE.value());
+		transactionService.updateTransaction(transaction);;
+
+		model.addAttribute("success", "Transaction For customer " + transaction.getCustId() +" closed successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
 		//return "success";
 		return "addactivitysuccess";
@@ -232,6 +339,37 @@ public class AppController {
 		
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addactivity";
+	}
+	
+	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.GET)
+	public String newTransaction(ModelMap model) {
+		Transaction transaction = new Transaction();
+		model.addAttribute("transaction", transaction);
+		model.addAttribute("edit", false);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers", customers);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
+		
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "addtransaction";
+	}
+	
+	
+	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.POST)
+	public String saveTransaction(@Valid Transaction transaction, BindingResult result,
+			ModelMap model) {
+		
+		if (result.hasErrors()) {
+			return "addtransaction";
+		}
+		transaction.setStatus(ApplicationConstants.OPEN.value());
+		transactionService.saveTransaction(transaction);
+
+		model.addAttribute("success", "Transaction For customer " + transaction.getCustId() +" saved successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addtransactionsuccess";
 	}
 	/**
 	 * This method will provide the medium to add a new user.
@@ -361,7 +499,7 @@ public class AppController {
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */
-	@RequestMapping(value = { "/edit-activity-{id}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/edit-activity-{id}" }, method = {RequestMethod.GET,RequestMethod.POST})
 	public String editActivity(@PathVariable String id, ModelMap model) {
 		Activity activity = activityService.findById(Integer.parseInt(id));
 		model.addAttribute("activity", activity);
@@ -371,6 +509,27 @@ public class AppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addactivity";
 	}
+	
+	@RequestMapping(value = { "/close-check-{id}" }, method = RequestMethod.GET)
+	public String closeCheck(@PathVariable String id, ModelMap model) {
+		Transaction transaction = transactionService.findById(Integer.parseInt(id));
+		List<Activity> openActivity = appUtil.calculateAnyDueOnCustomer(transaction.getCustId());
+		if(openActivity.isEmpty()){
+			model.addAttribute("transaction",transaction);
+			return "closeConfirmation";
+		}else
+		{
+			if(openActivity!= null && !openActivity.isEmpty()){
+				model.addAttribute("total",openActivity.get(openActivity.size()-1).getTotalAmount());
+				model.addAttribute("totalIntrest",openActivity.get(openActivity.size()-1).getTotalIntrest());
+				}
+		model.addAttribute("activities", openActivity);
+		model.addAttribute("transaction",transaction);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "listactivities";
+		}
+	}
+	
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */
@@ -467,6 +626,7 @@ public class AppController {
 	public List<UserProfile> initializeProfiles() {
 		return userProfileService.findAll();
 	}
+	
 	
 	/**
 	 * This method handles Access-Denied redirect.
