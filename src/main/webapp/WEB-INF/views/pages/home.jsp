@@ -13,6 +13,7 @@
 <li> Today's Transaction details</li>
 <div  class="well">
   <form:form method="POST"  class="form-horizontal">
+  
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>
@@ -87,6 +88,9 @@
 					     <td>${totalsDue}</td>
 					     <td></td>
 					     <td></td>
+					     <td><a href="<c:url value='/download/trans.pdf?printAll=today' />" class="btn btn-success">All</a></td>
+					     <td></td>
+        				</tr>
 	    		</tbody>
 	    	</table>
 			<c:if test="${empty pageStart or pageStart < 0}">

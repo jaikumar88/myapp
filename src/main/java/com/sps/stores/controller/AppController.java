@@ -87,6 +87,8 @@ public class AppController {
 	@Autowired
 	AppUtil appUtil;
 	
+	String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+	
 	/**
 	 * Handle request to download an Excel document
 	 */
@@ -95,10 +97,14 @@ public class AppController {
 		String custId = request.getParameter("custID");
 		String locId = request.getParameter("locID");
 		String transId = request.getParameter("transId");
+		String printToday = request.getParameter("printAll");
 		List<Transaction> transactions = new ArrayList<>();
 		if(transId!=null && !"".equalsIgnoreCase(transId)){
 			transactions.add(transactionService.findById(Integer.parseInt(transId)));
-		}else{
+		}else if(!"".equalsIgnoreCase(printToday) && printToday.equalsIgnoreCase("today")){
+			transactions = transactionService.findAllTransactionsByDate(todayDate);
+		}
+		else{
 			transactions = transactionService.findAllTransactions(locId, custId, "");
 		}
 	    model.addAttribute("transactions", transactions);
@@ -109,7 +115,7 @@ public class AppController {
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		
 		List<Transaction> transactions = transactionService.findAllTransactionsByDate(todayDate);
 		model.addAttribute("transactions", transactions);
 		double total=0.00;
