@@ -101,7 +101,7 @@ public class AppController {
 		List<Transaction> transactions = new ArrayList<>();
 		if(transId!=null && !"".equalsIgnoreCase(transId)){
 			transactions.add(transactionService.findById(Integer.parseInt(transId)));
-		}else if(!"".equalsIgnoreCase(printToday) && printToday.equalsIgnoreCase("today")){
+		}else if(printToday != null && !"".equalsIgnoreCase(printToday) && "today".equalsIgnoreCase(printToday)){
 			transactions = transactionService.findAllTransactionsByDate(todayDate);
 		}
 		else{

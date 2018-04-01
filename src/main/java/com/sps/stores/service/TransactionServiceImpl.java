@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<Transaction> findAllTransactionsByDate(String date) {
 		
-		return transactionDao.findAllTransactionByDate(date);
+		return transactionDao.findAllTransactionByDate(appUtil.stringToDate(date));
 	}
 
 	/**

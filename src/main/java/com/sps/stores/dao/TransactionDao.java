@@ -17,7 +17,7 @@ public interface TransactionDao {
 	
 	List<Transaction> findAllTransaction();
 	
-	List<Transaction>  findAllTransactionByDate(String date);
+	List<Transaction>  findAllTransactionByDate(Date date);
 	
 	void delete(Transaction transaction);
 	

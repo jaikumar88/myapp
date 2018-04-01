@@ -48,7 +48,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 	}
 
 	@Override
-	public List<Transaction> findAllTransactionByDate(String date) {
+	public List<Transaction> findAllTransactionByDate(Date date) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
 		criteria.add(Restrictions.eq("activityCreateDate", date));

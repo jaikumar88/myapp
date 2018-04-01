@@ -26,6 +26,9 @@ import com.sps.stores.model.Activity;
 @Transactional
 public class AppUtilImpl implements AppUtil{
 
+	SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+	
+	
 	@Autowired
 	ActivityDao activityDao;
 	
@@ -164,6 +167,16 @@ public class AppUtilImpl implements AppUtil{
 				}
 			return listActivity;
 			
+		}
+
+		@Override
+		public String dateToString(java.sql.Date date) {
+			return format.format(date);
+		}
+
+		@Override
+		public java.sql.Date stringToDate(String date) {
+			return java.sql.Date.valueOf(date);
 		}
 
 	

@@ -3,6 +3,8 @@
  */
 package com.sps.stores.model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 
 /**
  * @author Jai1.Kumar
@@ -28,8 +32,9 @@ public class Transaction {
 	@Column(name="CUST_ID",nullable=false)
 	private int custId;
 	
+	@Type(type="date")
 	@Column(name="CREATE_DATE",nullable=false)
-	private String activityCreateDate;
+	private Date activityCreateDate;
 	
 	@Column(name="PRODUCT_TYPE",nullable=false)
 	private String productType;
@@ -112,14 +117,14 @@ public class Transaction {
 	/**
 	 * @return the activityCreateDate
 	 */
-	public String getActivityCreateDate() {
+	public Date getActivityCreateDate() {
 		return activityCreateDate;
 	}
 
 	/**
 	 * @param activityCreateDate the activityCreateDate to set
 	 */
-	public void setActivityCreateDate(String activityCreateDate) {
+	public void setActivityCreateDate(Date activityCreateDate) {
 		this.activityCreateDate = activityCreateDate;
 	}
 
