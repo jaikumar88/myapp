@@ -87,13 +87,12 @@ public class AppController {
 	@Autowired
 	AppUtil appUtil;
 	
-	String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-	
 	/**
 	 * Handle request to download an Excel document
 	 */
 	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
 	public Model download(Model model,HttpServletRequest request) {
+		String todayDate = appUtil.dateToString(new Date());
 		String custId = request.getParameter("custID");
 		String locId = request.getParameter("locID");
 		String transId = request.getParameter("transId");
@@ -114,8 +113,11 @@ public class AppController {
 	}
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
-	public String homePage(ModelMap model) {
-		
+	public String homePage(ModelMap model,HttpServletRequest request) {
+		String todayDate = appUtil.dateToString(new Date());
+		if(request.getParameter("todayDate")!=null){
+			todayDate = request.getParameter("todayDate");
+		}
 		List<Transaction> transactions = transactionService.findAllTransactionsByDate(todayDate);
 		model.addAttribute("transactions", transactions);
 		double total=0.00;
@@ -158,8 +160,11 @@ public class AppController {
 	 * This method will list all existing users.
 	 */
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
-	public String home(ModelMap model) {
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+	public String home(ModelMap model,HttpServletRequest request) {
+		String todayDate = appUtil.dateToString(new Date());
+		if(request.getParameter("todayDate")!=null){
+			todayDate = request.getParameter("todayDate");
+		}
 		List<Transaction> transactions = transactionService.findAllTransactionsByDate(todayDate);
 		model.addAttribute("transactions", transactions);
 		double total=0.00;
@@ -501,6 +506,17 @@ public class AppController {
 	}
 
 	
+	@RequestMapping(value = { "/delete-transaction-{id}" }, method = {RequestMethod.GET,RequestMethod.POST})
+	public String deleteTransaction(@PathVariable String id, ModelMap model) {
+		Transaction transaction = transactionService.findById(Integer.parseInt(id));
+
+		transactionService.delete(transaction);
+		
+		model.addAttribute("success", "Transaction For customer " + transaction.getId() +" deleted successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		//return "success";
+		return "addtransactionsuccess";
+	}
 
 	/**
 	 * This method will provide the medium to update an existing user.

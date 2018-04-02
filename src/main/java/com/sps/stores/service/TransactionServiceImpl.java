@@ -74,4 +74,10 @@ public class TransactionServiceImpl implements TransactionService {
 			return transactionDao.findAllTransactions(location, custId, date);
 	}
 
+	@Override
+	public void delete(Transaction trans) {
+		transactionDao.delete(trans);
+		
+	}
+
 }

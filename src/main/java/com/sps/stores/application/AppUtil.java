@@ -15,5 +15,7 @@ public interface AppUtil {
 	
 	public String dateToString(Date date);
 	
+	public String dateToString(java.util.Date date);
+	
 	public Date stringToDate(String date);
 }

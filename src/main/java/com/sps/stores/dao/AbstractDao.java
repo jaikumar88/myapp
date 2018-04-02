@@ -22,7 +22,15 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 	private SessionFactory sessionFactory;
 
 	protected Session getSession(){
-		return sessionFactory.getCurrentSession();
+		Session session =null;
+		try{
+		 session = sessionFactory.getCurrentSession();
+		}catch (Exception e) {
+			session.flush();
+			session = sessionFactory.getCurrentSession();
+		}
+		return session;
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -40,6 +48,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
 	public void delete(T entity) {
 		getSession().delete(entity);
+		
 	}
 	
 	protected Criteria createEntityCriteria(){

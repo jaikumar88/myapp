@@ -13,7 +13,7 @@
 <li> Today's Transaction details</li>
 <div  class="well">
   <form:form method="POST"  class="form-horizontal">
-  
+  <input type="hidden" value="<%=new java.util.Date()%>" id="todayDate"/>
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>

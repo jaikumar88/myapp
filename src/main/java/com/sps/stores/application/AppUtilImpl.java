@@ -179,5 +179,10 @@ public class AppUtilImpl implements AppUtil{
 			return java.sql.Date.valueOf(date);
 		}
 
+		@Override
+		public String dateToString(Date date) {
+			return format.format(date);
+		}
+
 	
 }

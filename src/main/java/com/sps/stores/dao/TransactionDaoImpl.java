@@ -30,8 +30,8 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 	}
 
 	@Override
-	public void save(Transaction activity) {
-		persist(activity);
+	public void save(Transaction trans) {
+		persist(trans);
 
 	}
 
@@ -60,16 +60,16 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 	}
 
 	@Override
-	public void delete(Transaction activity) {
-		delete(activity);
+	public void delete(Transaction trans) {
+		super.delete(trans);
 	}
 
 	@Override
 	public void deleteById(String id) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("Id", id));
-		Transaction activity = (Transaction)crit.uniqueResult();
-		delete(activity);
+		crit.add(Restrictions.eq("id", id));
+		Transaction trans = (Transaction)crit.uniqueResult();
+		super.delete(trans);
 	}
 
 	@Override
