@@ -11,7 +11,6 @@ import javax.validation.Valid;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,7 +26,6 @@ import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
-import com.sps.stores.model.PartnerTransaction;
 import com.sps.stores.model.Product;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.Transaction;
@@ -466,7 +464,7 @@ public class AppController extends AbstractAppController {
 	@RequestMapping(value = { "/close-check-{id}" }, method = RequestMethod.GET)
 	public String closeCheck(@PathVariable String id, ModelMap model) {
 		Transaction transaction = transactionService.findById(Integer.parseInt(id));
-		List<Activity> openActivity = appUtil.calculateAnyDueOnCustomer(transaction.getCustId());
+		List<Activity> openActivity = activityService.calculateAnyDueOnCustomer(transaction.getCustId());
 		if(openActivity.isEmpty()){
 			model.addAttribute("transaction",transaction);
 			return "closeConfirmation";

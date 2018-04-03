@@ -11,8 +11,6 @@ public interface AppUtil {
 	
 	public double formatDouble(double value);
 	
-	public List<Activity> calculateAnyDueOnCustomer(int custId);
-	
 	public String dateToString(Date date);
 	
 	public String dateToString(java.util.Date date);

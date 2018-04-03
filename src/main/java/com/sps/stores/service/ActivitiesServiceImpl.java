@@ -75,6 +75,19 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 		return calculateTotalAndDueAmount( listActivity);
 	}
 
+	
+	@Override
+	public List<Activity> calculateAnyDueOnCustomer(int custId) {
+		List<Activity> activities = activityDao.findAllActivities("", String.valueOf(custId), "");
+		List<Activity> openItems = new ArrayList<>();
+		for(Activity activity:activities){
+			if(activity.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
+				openItems.add(activity);
+			}
+		}
+		calculateTotalAndDueAmount(openItems);
+		return openItems;
+	}
 	/**
 	 * @param custId
 	 * @param listActivity

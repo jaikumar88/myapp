@@ -30,8 +30,7 @@ public class AppUtilImpl implements AppUtil{
 	SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
 	
 	
-	@Autowired
-	ActivityDao activityDao;
+
 	
 		public String calculateIntrestAsOfToday(String amount,String startDate,String intRate){
 			
@@ -127,18 +126,7 @@ public class AppUtilImpl implements AppUtil{
 			return retValue;
 		}
 
-		@Override
-		public List<Activity> calculateAnyDueOnCustomer(int custId) {
-			List<Activity> activities = activityDao.findAllActivities("", String.valueOf(custId), "");
-			List<Activity> openItems = new ArrayList<>();
-			for(Activity activity:activities){
-				if(activity.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
-					openItems.add(activity);
-				}
-			}
-			calculateTotalAndDueAmount(openItems);
-			return openItems;
-		}
+	
 		
 		private List<Activity> calculateTotalAndDueAmount(List<Activity> listActivity) {
 			double totInterest = 0.00;

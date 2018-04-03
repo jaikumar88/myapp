@@ -1,6 +1,5 @@
 package com.sps.stores.service;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
-import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.dao.partner.PartnerTransactionDao;
 import com.sps.stores.model.PartnerTransaction;
 import com.sps.stores.model.Transaction;
 
-@Service("PartnerTransactionService")
+@Service("partnerTransactionService")
 @Transactional
 public class PartnerTransServiceImpl implements PartnerTransService {
 
