@@ -33,8 +33,8 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
 	public List<Product> findAllProducts() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("name"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Product> locations = (List<Product>) criteria.list();
-		return locations;
+		List<Product> products = (List<Product>) criteria.list();
+		return products;
 		
 	}
 

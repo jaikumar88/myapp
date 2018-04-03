@@ -1,6 +1,5 @@
 package com.sps.stores.dao.partner;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sps.stores.application.AppUtil;
 import com.sps.stores.dao.AbstractDao;
-import com.sps.stores.model.Partner;
 import com.sps.stores.model.PartnerTransaction;
-import com.sps.stores.model.Transaction;
 
 @Repository("partnerTransactionDao")
 public class PartnerTransactionDaoImpl extends AbstractDao<Integer, PartnerTransaction> implements PartnerTransactionDao {

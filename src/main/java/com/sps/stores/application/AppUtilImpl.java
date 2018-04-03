@@ -3,7 +3,6 @@
  */
 package com.sps.stores.application;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,11 +11,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sps.stores.dao.activity.ActivityDao;
 import com.sps.stores.model.Activity;
 
 /**

@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.sps.stores.dao.AbstractDao;
-import com.sps.stores.model.Customer;
 import com.sps.stores.model.Partner;
 
 @Repository("partnerDao")
