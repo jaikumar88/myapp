@@ -157,6 +157,42 @@
        <put-attribute name="body" value="/WEB-INF/views/pages/contactus.jsp" />  
    </definition>  
    
+    <definition name="addpartner" extends="base-definition">  
+       <put-attribute name="title" value="Add New Partner" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addpartner.jsp" />  
+   </definition>  
    
+     <definition name="partnerList" extends="base-definition">  
+       <put-attribute name="title" value="Partners List" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/listpartners.jsp" />  
+   </definition> 
+   
+   <definition name="addpartnersuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New partner Success" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addpartnersuccess.jsp" />  
+   </definition> 
+    <definition name="partnerTransList" extends="base-definition">  
+       <put-attribute name="title" value="Partners Transaction List" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/listpartnertrans.jsp" />  
+   </definition>
+   <definition name="locationList" extends="base-definition">  
+       <put-attribute name="title" value="Location List" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/locationlist.jsp" />  
+   </definition>
  
+   <definition name="addpartnertrans" extends="base-definition">  
+       <put-attribute name="title" value="Add New Partner" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addpartnertrans.jsp" />  
+   </definition>  
+   <definition name="addpartnertranssuccess" extends="base-definition">  
+       <put-attribute name="title" value="Add New partner Success" />  
+       <put-attribute name="menu" value="/WEB-INF/views/tiles/template/Menu.jsp" />
+       <put-attribute name="body" value="/WEB-INF/views/pages/addpartnertranssuccess.jsp" />  
+   </definition> 
 </tiles-definitions>

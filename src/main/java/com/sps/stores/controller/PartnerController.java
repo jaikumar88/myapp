@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.model.Partner;
 import com.sps.stores.model.PartnerTransaction;
+import com.sps.stores.model.Product;
 
 @Controller
 @RequestMapping("/")
@@ -90,6 +91,8 @@ public class PartnerController extends AbstractAppController {
 		model.addAttribute("partnertrans", partnerTrans);
 		List<Partner> partners = partnerService.findAllPartnersList();
 		model.addAttribute("partnerList",partners);
+		List<Product> products = productService.findAllProducts();
+		model.addAttribute("productList",products);
 		model.addAttribute("edit", false);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addpartnertrans";
@@ -123,6 +126,8 @@ public class PartnerController extends AbstractAppController {
 		model.addAttribute("partnertrans", partnerTransaction);
 		List<Partner> partners = partnerService.findAllPartnersList();
 		model.addAttribute("partnerList",partners);
+		List<Product> products = productService.findAllProducts();
+		model.addAttribute("productList",products);
 		model.addAttribute("edit", true);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addpartnertrans";

@@ -22,4 +22,6 @@ public interface TransactionDao {
 	void delete(Transaction transaction);
 	
 	List<Transaction> findAllTransactions(String location,String custId, Date date);
+	
+	List<Transaction> findAllTransactions(String location,String custId, Date startDate,Date endDate);
 }

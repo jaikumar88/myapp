@@ -22,5 +22,7 @@ public interface TransactionService {
 	
 	List<Transaction> findAllTransactions(String location,String custId, String date);
 	
+	List<Transaction> findAllTransactions(String location,String custId, String startDate,String endDate);
+	
 	void delete(Transaction trans);
 }

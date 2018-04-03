@@ -57,13 +57,14 @@ function updateDate(date){
  
   
 		<div id="selectDiv">  Select the Location name and customer name </div>
-		
+					Gaun Ka naam:
 					<select onchange="myFun(this)" name="locId" id="locId">
 						<option value="">----Select----</option>
 						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
 							<option value="${loc.location}" ${loc.location == locId ? 'selected="selected"' : ''}>${loc.location}</option>
 						</c:forEach>
 					</select>
+					Grahak Name:
 					<select name="custId" id="custId">
 					    <option value="">Select</option>
 						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
@@ -71,7 +72,8 @@ function updateDate(date){
 						</c:forEach>
 					</select>
 					
-					<input type="date" id="transDate" name="transDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' />
+					Start Date:<input type="date" id="startDate" name="startDate" class="input-sm" value='${startDate}' />
+					End Date:<input type="date" id="endDate" name="endDate" class="input-sm" value='${endDate}' />
 					
 					<input type="submit" value="listTransaction" class="btn btn-primary btn-sm"/>
 					
@@ -101,9 +103,15 @@ function updateDate(date){
 					</tr>
 		    	</thead>
 	    		<tbody>
+	    		 <c:set var="totals" value="${0}" />
+	    		 <c:set var="totalExp" value="${0}" />
+	    		  <c:set var="dueTotal" value="${0}" />
 				<c:forEach items="${transactions}" var="transaction" varStatus="letterCounter"
                         begin="${pageStart}" end="${pageStart + perPage - 1}">
 					<tr>
+					 <c:set var="totals" value="${totals + transaction.totalAmount}" />
+					 <c:set var="totalExp" value="${totalExp + transaction.totalExpense}" />
+					 <c:set var="dueTotal" value="${dueTotal + transaction.dueAmount}" />
 						<td>${transaction.customer.firstName} ${transaction.customer.lastName} </td>
 						<td>${transaction.activityCreateDate}</td>
 						<td>${transaction.productType}</td>
@@ -136,8 +144,8 @@ function updateDate(date){
 					     <td></td>
 					     <td></td>
 					     <td></td>
-					     <td></td>
-					     <td>${totalsDue}</td>
+					     <td>${totalExp}</td>
+					     <td>${dueTotal}</td>
 					     <td>
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/download/trans.pdf?custID=${custId}' />" class="btn btn-success custom-width">Print</a></td>
