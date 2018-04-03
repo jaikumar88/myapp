@@ -11,7 +11,6 @@ import javax.validation.Valid;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,7 +26,6 @@ import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
-import com.sps.stores.model.PartnerTransaction;
 import com.sps.stores.model.Product;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.Transaction;
