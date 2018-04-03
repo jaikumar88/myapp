@@ -85,4 +85,15 @@ public class TransactionServiceImpl implements TransactionService {
 		
 	}
 
+	@Override
+	public List<Transaction> findAllTransactions(String location, String custId, String startDate, String endDate) {
+		Date stDate = null;
+		Date edDate = null;
+		if(startDate != null && !"".equalsIgnoreCase(startDate))
+		stDate = appUtil.stringToDate(startDate);
+		if(endDate != null && !"".equalsIgnoreCase(endDate))
+			edDate = appUtil.stringToDate(endDate);
+		return transactionDao.findAllTransactions(location, custId, stDate, edDate);
+	}
+
 }

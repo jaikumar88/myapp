@@ -28,6 +28,7 @@ import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
 import com.sps.stores.model.PartnerTransaction;
+import com.sps.stores.model.Product;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.Transaction;
 import com.sps.stores.model.User;
@@ -151,9 +152,10 @@ public class AppController extends AbstractAppController {
 	public String listTransactions(ModelMap model,HttpServletRequest request) {
 		String custId = request.getParameter("custId");
 		String locId = request.getParameter("locId");
-		String transDate = request.getParameter("transDate");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
 		
-		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, transDate);
+		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, startDate, endDate);
 		model.addAttribute("transactions", transactions);
 		double total=0.00;
 		double totalDue= 0.00;
@@ -174,7 +176,8 @@ public class AppController extends AbstractAppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("custId",custId);
 		model.addAttribute("locId",locId);
-		model.addAttribute("transDate",transDate);
+		model.addAttribute("startDate",startDate);
+		model.addAttribute("endDate",endDate);
 		return "transactionList";
 	}
 	/**
@@ -296,6 +299,8 @@ public class AppController extends AbstractAppController {
 		model.addAttribute("locations",locations);
 		List<Partner> partners = partnerService.findAllPartnersList();
 		model.addAttribute("partners",partners);
+		List<Product> products = productService.findAllProducts();
+		model.addAttribute("productList",products);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addtransaction";
 	}

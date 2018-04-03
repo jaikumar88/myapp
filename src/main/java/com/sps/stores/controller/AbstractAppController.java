@@ -13,6 +13,7 @@ import com.sps.stores.service.CustomerService;
 import com.sps.stores.service.LocationService;
 import com.sps.stores.service.PartnerService;
 import com.sps.stores.service.PartnerTransService;
+import com.sps.stores.service.ProductService;
 import com.sps.stores.service.StoreService;
 import com.sps.stores.service.TransactionService;
 import com.sps.stores.service.UserProfileService;
@@ -58,6 +59,9 @@ public abstract class AbstractAppController {
 	
 	@Autowired
 	PartnerTransService partnerTransService;
+	
+	@Autowired
+	ProductService productService;
 	
 	/**
 	 * This method returns the principal[user-name] of logged-in user.

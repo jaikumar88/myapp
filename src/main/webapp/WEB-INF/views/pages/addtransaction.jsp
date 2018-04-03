@@ -127,13 +127,9 @@ function updateSubTotal(){
 					<label class="col-md-3 control-lable" for="productType">Product Type</label>
 					<div class="col-md-7">
 					 <select name="productType" id="productType">
-					    <option value="Dhan">Dhan(Rice)</option>
-					    <option value="Gehu">Gehu(Wheat)</option>
-					    <option value="Sarso">Sarso(Mustered)</option>
-					    <option value="Bajra">Bajra(Bajra)</option>
-					    <option value="Jaee">Jaee(Oat)</option>
-					    <option value="Gawar">Gawar(Khurti)</option>
-					    <option value="Moong">Moong(Moong)</option>
+					    <c:forEach items="${productList}" var="product" varStatus="letterCounter">
+							<option value="${product.name}" ${product.name == productname ? 'selected="selected"' : ''}>${product.description}</option>
+						</c:forEach>
 					  </select>
 						<div class="has-error">
 							<form:errors path="productType" class="help-inline"/>

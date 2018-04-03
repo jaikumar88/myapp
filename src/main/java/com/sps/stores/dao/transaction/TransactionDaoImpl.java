@@ -97,4 +97,29 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 
 	}
 
+	
+	@Override
+	public List<Transaction> findAllTransactions(String location, String custId, Date startDate, Date endDate) {
+		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
+		if(custId != null && !"".equalsIgnoreCase(custId))
+			criteria.add(Restrictions.eq("custId", Integer.parseInt(custId)));
+		if(startDate != null ){
+			criteria.add(Restrictions.ge("activityCreateDate", startDate));
+		}
+		if(endDate != null ){
+			criteria.add(Restrictions.le("activityCreateDate",endDate));
+		}
+		if(location != null && !"".equalsIgnoreCase(location))
+		{
+			criteria.createAlias("customer", "cust");
+			criteria.add(Restrictions.eq("cust.location", location));
+		}
+		
+		List<Transaction> transactions = (List<Transaction>) criteria.list();
+		for(Transaction transaction : transactions){
+			Hibernate.initialize(transaction.getCustomer());
+		}
+		return transactions;
+	}
+
 }
