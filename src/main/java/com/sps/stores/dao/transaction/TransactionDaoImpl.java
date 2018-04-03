@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.transaction;
 
 import java.sql.Date;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.sps.stores.dao.AbstractDao;
 import com.sps.stores.model.Transaction;
 
 @Repository("transactionDao")
@@ -73,12 +74,20 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 	}
 
 	@Override
-	public List<Transaction> findAllTransactions(String location, String custId, String date) {
+	public List<Transaction> findAllTransactions(String location, String custId, Date date) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
 		//criteria.add(Restrictions.eq("location", location));
 		if(custId != null && !"".equalsIgnoreCase(custId))
 		criteria.add(Restrictions.eq("custId", Integer.parseInt(custId)));
+		if(date != null)
+			criteria.add(Restrictions.eq("activityCreateDate", date));
+		if(location != null && !"".equalsIgnoreCase(location))
+		{
+			criteria.createAlias("customer", "cust");
+			criteria.add(Restrictions.eq("cust.location", location));
+		}
+		
 		//criteria.add(Restrictions.gt("activityCreateDate", date));
 		List<Transaction> transactions = (List<Transaction>) criteria.list();
 		for(Transaction transaction : transactions){

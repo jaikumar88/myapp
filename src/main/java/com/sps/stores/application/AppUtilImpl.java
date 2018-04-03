@@ -3,6 +3,7 @@
  */
 package com.sps.stores.application;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sps.stores.dao.ActivityDao;
+import com.sps.stores.dao.activity.ActivityDao;
 import com.sps.stores.model.Activity;
 
 /**
@@ -176,9 +177,26 @@ public class AppUtilImpl implements AppUtil{
 
 		@Override
 		public java.sql.Date stringToDate(String date) {
-			return java.sql.Date.valueOf(date);
+			java.sql.Date dt = null;
+			if(date!=null && !"".equalsIgnoreCase(date))
+				dt = java.sql.Date.valueOf(date);
+			return dt;
 		}
 
+		@Override
+		public Date stringToUtilDate(String date) {
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date dt = null;
+			if(date!=null && !"".equalsIgnoreCase(date))
+				date += " 00:00:00";
+				try {
+					dt = ft.parse(date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			return dt;
+		}
 		@Override
 		public String dateToString(Date date) {
 			return format.format(date);

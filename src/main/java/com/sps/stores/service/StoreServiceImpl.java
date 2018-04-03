@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sps.stores.dao.StoreDao;
+import com.sps.stores.dao.store.StoreDao;
 import com.sps.stores.model.Store;
 
 @Service("storeService")

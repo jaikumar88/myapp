@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.transaction;
 
 import java.sql.Date;
 import java.util.List;
@@ -21,5 +21,5 @@ public interface TransactionDao {
 	
 	void delete(Transaction transaction);
 	
-	List<Transaction> findAllTransactions(String location,String custId, String date);
+	List<Transaction> findAllTransactions(String location,String custId, Date date);
 }

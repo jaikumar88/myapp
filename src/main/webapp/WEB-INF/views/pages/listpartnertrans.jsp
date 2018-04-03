@@ -42,55 +42,49 @@ function updateDate(date){
 	alert(date.value);
 	document.getElementById("transDate").value = date.value;
 }
+
+function validateDate(endDt){
+	var stDate = document.getElementById("startDate").value;
+	if(stDate > endDt.value)
+		alert()
+}
 </script>
 
 
-
-<c:set var="letters" scope="session" value="${transactions}"/>
-<c:set var="totalCount" scope="session" value="${fn:length(transactions)}"/>
+<c:set var="totalCount" scope="session" value="${fn:length(partnertrans)}"/>
 <c:set var="perPage" scope="session"  value="10"/>
 <c:set var="pageStart" value="${param.start}"/>
-<c:set var="customerList" scope="session" value="${customerList}"/>
+<c:set var="customerList" scope="session" value="${partnerList}"/>
 
 <div  class="well">
   <form:form method="POST"  class="form-horizontal">
  
   
-		<div id="selectDiv">  Select the Location name and customer name </div>
+		<div id="selectDiv">  Select the Partner name </div>
 		
-					<select onchange="myFun(this)" name="locId" id="locId">
-						<option value="">----Select----</option>
-						<c:forEach items="${locations}" var="loc" varStatus="letterCounter">
-							<option value="${loc.location}" ${loc.location == locId ? 'selected="selected"' : ''}>${loc.location}</option>
-						</c:forEach>
-					</select>
-					<select name="custId" id="custId">
+					
+					<select name="partnerId" id="partnerId">
 					    <option value="">Select</option>
-						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
-							<option value="${cust.id}" ${cust.id == custId ? 'selected="selected"' : ''}>${cust.firstName} ${cust.lastName}</option>
+						<c:forEach items="${partnerList}" var="partner" varStatus="letterCounter">
+							<option value="${partner.id}" ${partner.id == partnerId ? 'selected="selected"' : ''}>${partner.firstName} ${partner.lastName}</option>
 						</c:forEach>
 					</select>
 					
-					<input type="date" id="transDate" name="transDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' />
+					<input type="date" id="startDate" name="startDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' />
 					
+					<input type="date" id="endDate" name="endDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' onchange="validateDate(this)"/>
 					<input type="submit" value="listTransaction" class="btn btn-primary btn-sm"/>
 					
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>
-				        <th>Customer Name</th>
+				        <th>Partner Name</th>
 				        <th>Date</th>
 				        <th>Product Type </th>
 				        <th>Weight </th>
 				        <th>No Of Piece </th>
 				        <th>Rate</th>
-				        <th> Memo </th>
 				        <th> Total Amount </th>
-				        <th> Exp per piece </th>
-				        <th> Other Exp </th>
-				        <th> Deduction </th>
-				        <th> Total Exp </th>
-				        <th> Due Amt </th>
 				        <sec:authorize access="hasRole('ADMIN')">
 				        	<th >Edit </th>
 				        </sec:authorize>
@@ -101,43 +95,36 @@ function updateDate(date){
 					</tr>
 		    	</thead>
 	    		<tbody>
-				<c:forEach items="${transactions}" var="transaction" varStatus="letterCounter"
+	    		<c:set var="totals" value="${0}" />
+				<c:forEach items="${partnertrans}" var="transaction" varStatus="letterCounter"
                         begin="${pageStart}" end="${pageStart + perPage - 1}">
 					<tr>
-						<td>${transaction.customer.firstName} ${transaction.customer.lastName} </td>
+					    <c:set var="totals" value="${totals + transaction.totalAmount}" />
+						<td>${transaction.partner.firstName} ${transaction.partner.lastName} </td>
 						<td>${transaction.activityCreateDate}</td>
 						<td>${transaction.productType}</td>
 						<td>${transaction.weight}</td>
 						<td>${transaction.quantity}</td>
 					    <td>${transaction.rate}</td>
-					     <td>${transaction.memo}</td>
 					     <td>${transaction.totalAmount}</td>
-					     <td>${transaction.expPerItem}</td>
-					     <td>${transaction.otherExpense}</td>
-					     <td>${transaction.deductionPercent}</td>
-					     <td>${transaction.totalExpense}</td>
-					     <td>${transaction.dueAmount}</td>
 					     <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/edit-transaction-${transaction.id}' />" >edit</a></td>
+							<td><a href="<c:url value='/edit-partnertrans-${transaction.id}' />" >edit</a></td>
 				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/delete-transaction-${transaction.id}' />" >delete</a></td>
+							<td><a href="<c:url value='/delete-partnertrans-${transaction.id}' />" >delete</a></td>
         				</sec:authorize>
 					</tr>
 				</c:forEach>
 				  <tr>  <td> Total </td>
 				  		<td></td>
-						<td> </td>
-						<td></td>
-						<td></td>
+						
 					    <td></td>
 					     <td></td>
+					     <td></td>
+					     <td></td>
+					     
+					     
 					     <td>${totals}</td>
-					     <td></td>
-					     <td></td>
-					     <td></td>
-					     <td></td>
-					     <td>${totalsDue}</td>
 					     <td>
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/download/trans.pdf?custID=${custId}' />" class="btn btn-success custom-width">Print</a></td>

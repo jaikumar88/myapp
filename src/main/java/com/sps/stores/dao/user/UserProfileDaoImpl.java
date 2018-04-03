@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.user;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.sps.stores.dao.AbstractDao;
 import com.sps.stores.model.UserProfile;
 
 

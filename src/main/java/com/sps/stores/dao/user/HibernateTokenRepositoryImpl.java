@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.user;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sps.stores.dao.AbstractDao;
 import com.sps.stores.model.PersistentLogin;
 
 @Repository("tokenRepositoryDao")

@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name="CUSTOMER")
 public class Customer {
@@ -21,11 +19,11 @@ public class Customer {
 	@Column(name="CUST_ID",nullable=false)
 	private int id;
 	
-	@NotEmpty
+	
 	@Column(name="FIRST_NAME", nullable=false)
 	private String firstName;
 
-	@NotEmpty
+	
 	@Column(name="LAST_NAME", nullable=false)
 	private String lastName;
 

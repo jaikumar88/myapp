@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name="STORE")
 public class Store {
@@ -16,19 +14,19 @@ public class Store {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotEmpty
+	
 	@Column(name="STORE_ID", unique=true, nullable=false)
 	private String storeId;
 	
-	@NotEmpty
+	
 	@Column(name="STORE_NAME", nullable=false)
 	private String storeName;
 		
-	@NotEmpty
+	
 	@Column(name="STORE_ADDRESS", nullable=true)
 	private String address;
 	
-	@NotEmpty
+	
 	@Column(name="STORE_COUNTRY", nullable=true)
 	private String country;
 

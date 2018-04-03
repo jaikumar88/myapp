@@ -1,3 +1,5 @@
+
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -93,15 +95,20 @@ function updateSubTotal(){
 							<option value="${loc.location}" ${loc.location == locId ? 'selected="selected"' : ''}>${loc.location}</option>
 						</c:forEach>
 					    </select>
+					    Customer:
 					    <select name="custId" id="custId">
 					    <option value="">Select</option>
 						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
 							<option value="${cust.id}">${cust.firstName} ${cust.lastName}</option>
 						</c:forEach>
 						</select>
-						<div class="has-error">
-							<form:errors path="custId" class="help-inline"/>
-						</div>
+						Shop No:
+						<select name="partnerId" id="partnerId">
+					    <c:forEach items="${partners}" var="partner" varStatus="letterCounter">
+							<option value="${partner.id}">${partner.shopNo}</option>
+						</c:forEach>
+						</select>
+						
 						
 					</div>
 				</div>	
@@ -109,7 +116,7 @@ function updateSubTotal(){
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="activityCreateDate">Creation Date(YYYY-MM-dd)</label>
 					<div class="col-md-7">
-						<form:input type="date" path="activityCreateDate" id="activityCreateDate" class="input-group-sm input-sm"/>
+						<form:input type="date" path="activityCreateDate" id="activityCreateDate" class="input-group-sm input-sm"  value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' />
 						<div class="has-error">
 							<form:errors path="activityCreateDate" class="help-inline"/>
 						</div>
@@ -139,14 +146,14 @@ function updateSubTotal(){
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="weight">Weight(Kg Only)</label>
 					<div class="col-md-7">
-						<form:input type="text" path="weight" id="weight" class="input-group-sm input-sm" onchange="calculateTotalAmount()" value="0"/>
+						<form:input type="text" path="weight" id="weight" class="input-group-sm input-sm" onchange="calculateTotalAmount()" value="0" required="true"/>
 						<div class="has-error">
 							<form:errors path="weight" class="help-inline"/>
 						</div>
 					</div>
 					<label class="col-md-3 control-lable" for="rate">Rate per Kg </label>
 					<div class="col-md-7">
-						<form:input type="text" path="rate" id="rate" class="input-group-sm input-sm"  onchange="calculateTotalAmount()" value="0"/>
+						<form:input type="text" path="rate" id="rate" class="input-group-sm input-sm"  onchange="calculateTotalAmount()" value="0" required="true"/>
 						<div class="has-error">
 							<form:errors path="rate" class="help-inline"/>
 						</div>

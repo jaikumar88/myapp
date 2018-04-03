@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
 import com.sps.stores.application.ApplicationConstants;
-import com.sps.stores.dao.ActivityDao;
-import com.sps.stores.dao.CustomerDao;
+import com.sps.stores.dao.activity.ActivityDao;
+import com.sps.stores.dao.customer.CustomerDao;
 import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 

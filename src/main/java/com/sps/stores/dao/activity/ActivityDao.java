@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.activity;
 
 import java.sql.Date;
 import java.util.List;

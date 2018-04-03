@@ -13,8 +13,11 @@
 		<li><a href="${pageContext.request.contextPath}/customerList">List Customer</a></li>
 		<li><a href="${pageContext.request.contextPath}/activityList">List Activities</a></li>
 		<li><a href="${pageContext.request.contextPath}/transactionList">List Transactions</a></li>
-       	<li><a href="${pageContext.request.contextPath}/storeList">Store List</a></li>
-	   	<li><a href="${pageContext.request.contextPath}/newstore">Add Store</a></li>
+       	<li><a href="${pageContext.request.contextPath}/partnerList">Adtiya List</a></li>
+	   	<li><a href="${pageContext.request.contextPath}/newpartner">Add Adtiya</a></li>
+	   	<li><a href="${pageContext.request.contextPath}/partnerTransList">List Partners Trans</a></li>
+	   	<li><a href="${pageContext.request.contextPath}/newPartnerTrans">Add Partner Trans</a></li>
+	   	<li><a href="${pageContext.request.contextPath}/locationList">List Location</a></li>
 	   	<li><a href="${pageContext.request.contextPath}/newLocation">Add Location</a></li>
 	   	</sec:authorize>
 	   	<sec:authorize access="hasRole('ADMIN')">

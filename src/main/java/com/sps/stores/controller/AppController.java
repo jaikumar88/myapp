@@ -1,7 +1,6 @@
 package com.sps.stores.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -10,15 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -28,22 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.sps.stores.application.AppUtil;
 import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
+import com.sps.stores.model.Partner;
+import com.sps.stores.model.PartnerTransaction;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.Transaction;
 import com.sps.stores.model.User;
 import com.sps.stores.model.UserProfile;
-import com.sps.stores.service.ActivtiesService;
-import com.sps.stores.service.CustomerService;
-import com.sps.stores.service.LocationService;
-import com.sps.stores.service.StoreService;
-import com.sps.stores.service.TransactionService;
-import com.sps.stores.service.UserProfileService;
-import com.sps.stores.service.UserService;
 
 
 /**
@@ -52,65 +40,7 @@ import com.sps.stores.service.UserService;
 @Controller
 @RequestMapping("/")
 @SessionAttributes({"roles"})
-public class AppController {
-
-	@Autowired
-	UserService userService;
-	
-	@Autowired
-	StoreService storeService;
-	
-	@Autowired
-	ActivtiesService activityService;
-	
-	@Autowired
-	CustomerService customerService;
-	
-	@Autowired
-	LocationService locationService;
-	
-	@Autowired
-	UserProfileService userProfileService;
-	
-	@Autowired
-	TransactionService transactionService;
-	
-	@Autowired
-	MessageSource messageSource;
-
-	@Autowired
-	PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
-	
-	@Autowired
-	AuthenticationTrustResolver authenticationTrustResolver;
-	
-	@Autowired
-	AppUtil appUtil;
-	
-	/**
-	 * Handle request to download an Excel document
-	 */
-	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
-	public Model download(Model model,HttpServletRequest request) {
-		String todayDate = appUtil.dateToString(new Date());
-		String custId = request.getParameter("custID");
-		String locId = request.getParameter("locID");
-		String transId = request.getParameter("transId");
-		String printToday = request.getParameter("printAll");
-		List<Transaction> transactions = new ArrayList<>();
-		if(transId!=null && !"".equalsIgnoreCase(transId)){
-			transactions.add(transactionService.findById(Integer.parseInt(transId)));
-		}else if(printToday != null && !"".equalsIgnoreCase(printToday) && "today".equalsIgnoreCase(printToday)){
-			transactions = transactionService.findAllTransactionsByDate(todayDate);
-		}
-		else{
-			transactions = transactionService.findAllTransactions(locId, custId, "");
-		}
-	    model.addAttribute("transactions", transactions);
-	    model.addAttribute("custId",custId);
-	    model.addAttribute("FileName",getPrincipal());
-	    return model;
-	}
+public class AppController extends AbstractAppController {
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model,HttpServletRequest request) {
@@ -221,7 +151,9 @@ public class AppController {
 	public String listTransactions(ModelMap model,HttpServletRequest request) {
 		String custId = request.getParameter("custId");
 		String locId = request.getParameter("locId");
-		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, "");
+		String transDate = request.getParameter("transDate");
+		
+		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, transDate);
 		model.addAttribute("transactions", transactions);
 		double total=0.00;
 		double totalDue= 0.00;
@@ -242,6 +174,7 @@ public class AppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 		model.addAttribute("custId",custId);
 		model.addAttribute("locId",locId);
+		model.addAttribute("transDate",transDate);
 		return "transactionList";
 	}
 	/**
@@ -361,7 +294,8 @@ public class AppController {
 		model.addAttribute("customers", customers);
 		List<Location> locations = locationService.findAllLocations();
 		model.addAttribute("locations",locations);
-		
+		List<Partner> partners = partnerService.findAllPartnersList();
+		model.addAttribute("partners",partners);
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addtransaction";
 	}
@@ -369,14 +303,15 @@ public class AppController {
 	
 	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.POST)
 	public String saveTransaction(@Valid Transaction transaction, BindingResult result,
-			ModelMap model) {
+			ModelMap model,HttpServletRequest request) {
+		String partnerId = request.getParameter("partnerId");
 		
 		if (result.hasErrors()) {
 			return "addtransaction";
 		}
 		transaction.setStatus(ApplicationConstants.OPEN.value());
 		transactionService.saveTransaction(transaction);
-
+		partnerTransService.savePartnerTrans(transaction,partnerId);
 		model.addAttribute("success", "Transaction For customer " + transaction.getCustId() +" saved successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
 		//return "success";
@@ -687,20 +622,6 @@ public class AppController {
 		return "redirect:/login?logout";
 	}
 
-	/**
-	 * This method returns the principal[user-name] of logged-in user.
-	 */
-	private String getPrincipal(){
-		String userName = null;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		if (principal instanceof UserDetails) {
-			userName = ((UserDetails)principal).getUsername();
-		} else {
-			userName = principal.toString();
-		}
-		return userName;
-	}
 	
 	/**
 	 * This method returns true if users is already authenticated [logged-in], else false.
@@ -709,6 +630,19 @@ public class AppController {
 	    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    return authenticationTrustResolver.isAnonymous(authentication);
 	}
+	
 
+	
+	/**
+	 * This method will list all partners created.
+	 */
+	@RequestMapping(value = { "/locationList" }, method = RequestMethod.GET)
+	public String listLocation(ModelMap model) {
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations", locations);
+		model.addAttribute("loggedinuser", getPrincipal());
+		return "locationList";
+	}
+	
 
 }

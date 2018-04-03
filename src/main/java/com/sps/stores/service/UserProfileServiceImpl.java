@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sps.stores.dao.UserProfileDao;
+import com.sps.stores.dao.user.UserProfileDao;
 import com.sps.stores.model.UserProfile;
 
 

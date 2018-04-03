@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sps.stores.model.Greeting;
 
 @RestController
-public class GreetingController {
+public class MobileController {
 
 	@Autowired
 	AuthenticationTrustResolver authenticationTrustResolver;

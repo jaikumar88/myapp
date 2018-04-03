@@ -1,5 +1,6 @@
 package com.sps.stores.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
-import com.sps.stores.dao.TransactionDao;
+import com.sps.stores.dao.transaction.TransactionDao;
 import com.sps.stores.model.Transaction;
 
 @Service("transactionService")
@@ -70,8 +71,12 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public List<Transaction> findAllTransactions(String location, String custId, String date) {
+			Date dt = null;
+			if(date != null && !"".equalsIgnoreCase(date))
+			dt = appUtil.stringToDate(date);
+			
 		
-			return transactionDao.findAllTransactions(location, custId, date);
+			return transactionDao.findAllTransactions(location, custId, dt);
 	}
 
 	@Override

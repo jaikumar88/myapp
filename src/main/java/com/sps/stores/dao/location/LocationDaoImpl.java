@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.location;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
+import com.sps.stores.dao.AbstractDao;
 import com.sps.stores.model.Location;
 
 @Repository("locationDao")

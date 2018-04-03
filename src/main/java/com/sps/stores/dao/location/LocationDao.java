@@ -1,4 +1,4 @@
-package com.sps.stores.dao;
+package com.sps.stores.dao.location;
 
 import java.util.List;
 
