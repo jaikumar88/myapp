@@ -39,6 +39,9 @@ public class Activity {
 	@Column(name="AMOUNT",nullable=false)
 	private String amount;
 	
+	@Column(name="INTREST_AMT",nullable=false)
+	private String intrest;
+	
 	@Column(name="CLOSE_DATE",nullable=true)
 	private String closingDate;
 	
@@ -51,6 +54,7 @@ public class Activity {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CUST_ID",referencedColumnName = "CUST_ID", nullable = false, updatable = false, insertable = false)
 	private Customer owner;
+	
 	
 	@Transient
 	private String intrestAmount;
@@ -293,6 +297,20 @@ public class Activity {
 	 */
 	public void setTotalIntrest(String totalIntrest) {
 		this.totalIntrest = totalIntrest;
+	}
+
+	/**
+	 * @return the intrest
+	 */
+	public String getIntrest() {
+		return intrest;
+	}
+
+	/**
+	 * @param intrest the intrest to set
+	 */
+	public void setIntrest(String intrest) {
+		this.intrest = intrest;
 	}
 	
 	

@@ -88,15 +88,22 @@ function myFun(loc_id){
 					</tr>
 		    	</thead>
 	    		<tbody>
+	    		<c:set var="amountTotals" value="${0}" />
+	    		 <c:set var="totalIntrest" value="${0}" />
+
 				<c:forEach items="${activities}" var="activity" varStatus="letterCounter"
                         begin="${pageStart}" end="${pageStart + perPage - 1}">
 					<tr>
+					  <c:if test="${activity.status eq 'Open' }">
+					  <c:set var="amountTotals" value="${amountTotals + activity.amount}" />
+					  <c:set var="totalIntrest" value="${totalIntrest + activity.intrest}" />
+					  </c:if>
 						<td>${activity.owner.firstName} ${activity.owner.lastName} </td>
 						<td>${activity.activityCreateDate}</td>
 						<td>${activity.activityType}</td>
 						<td>${activity.memo}</td>
 						<td>${activity.amount}</td>
-					    <td>${activity.intrestAmount}</td>
+					    <td>${activity.intrest}</td>
 					     <td>${activity.status}</td>
 					     <sec:authorize access="hasRole('USER') or hasRole('ADMIN')">
 							<td><a href="<c:url value='/closeActivity-${activity.id}' />" class="btn btn-success custom-width">Close</a></td>
@@ -110,7 +117,7 @@ function myFun(loc_id){
 					</tr>
 				</c:forEach>
 				  <tr>  <td> Total Due </td>
-				  		<td>${total}</td>
+				  		<td>${amountTotals + totalIntrest}</td>
 						<td>Total Intrest </td>
 						<td>${totalIntrest}</td>
 						<td></td>

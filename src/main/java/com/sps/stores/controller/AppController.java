@@ -157,16 +157,7 @@ public class AppController extends AbstractAppController {
 		
 		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, startDate, endDate);
 		model.addAttribute("transactions", transactions);
-		double total=0.00;
-		double totalDue= 0.00;
-		for(Transaction trans:transactions){
-			if(trans!=null){
-				total+= "".equalsIgnoreCase(trans.getTotalAmount())?0.00:Double.valueOf(trans.getTotalAmount());
-				totalDue+= "".equalsIgnoreCase(trans.getDueAmount())?0.00:Double.valueOf(trans.getDueAmount());
-			}
-		}
-		model.addAttribute("totals", total);
-		model.addAttribute("totalsDue", totalDue);
+		
 		List<Location> locations = locationService.findAllLocations();
 		model.addAttribute("locations",locations);
 		List<Customer> customers = customerService.findAllCustomers();

@@ -92,6 +92,7 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 				{
 					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
 					totInterest += Double.valueOf(intrestAmt);
+					activity.setIntrest(intrestAmt);
 					totdueAmount += Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
 					activity.setIntrestAmount(intrestAmt);
 					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
@@ -99,6 +100,7 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 					}
 				} else if(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.RECEIVED.value())){
 					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
+					activity.setIntrest(intrestAmt);
 					totInterest -= Double.valueOf(intrestAmt);
 					totdueAmount -= Double.valueOf(intrestAmt) + Double.valueOf(activity.getAmount().equalsIgnoreCase("")?"0.00":activity.getAmount());
 					activity.setIntrestAmount(intrestAmt);
