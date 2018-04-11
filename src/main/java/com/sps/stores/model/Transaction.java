@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -86,6 +87,8 @@ public class Transaction {
 	@JoinColumn(name="CUST_ID",referencedColumnName = "CUST_ID", nullable = false, updatable = false, insertable = false)
 	private Customer customer;
 
+	@Transient
+	private String finalDue;
 	/**
 	 * @return the id
 	 */
@@ -488,6 +491,20 @@ public class Transaction {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the finalDue
+	 */
+	public String getFinalDue() {
+		return finalDue;
+	}
+
+	/**
+	 * @param finalDue the finalDue to set
+	 */
+	public void setFinalDue(String finalDue) {
+		this.finalDue = finalDue;
 	}
 	
 

@@ -51,6 +51,12 @@ public class Activity {
 	@Column(name="TS_UPD",nullable=true)
 	private String updateDate;
 
+	@Column(name="TRANS_ID",nullable=false, columnDefinition = "int default 0")
+	private int transId;
+	
+	@Column(name="PARTNER_TRANS_ID",nullable=false,columnDefinition = "int default 0")
+	private int partnerTransId;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CUST_ID",referencedColumnName = "CUST_ID", nullable = false, updatable = false, insertable = false)
 	private Customer owner;
@@ -311,6 +317,34 @@ public class Activity {
 	 */
 	public void setIntrest(String intrest) {
 		this.intrest = intrest;
+	}
+
+	/**
+	 * @return the transId
+	 */
+	public int getTransId() {
+		return transId;
+	}
+
+	/**
+	 * @param transId the transId to set
+	 */
+	public void setTransId(int transId) {
+		this.transId = transId;
+	}
+
+	/**
+	 * @return the partnerTransId
+	 */
+	public int getPartnerTransId() {
+		return partnerTransId;
+	}
+
+	/**
+	 * @param partnerTransId the partnerTransId to set
+	 */
+	public void setPartnerTransId(int partnerTransId) {
+		this.partnerTransId = partnerTransId;
 	}
 	
 	

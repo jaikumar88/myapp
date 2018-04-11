@@ -93,6 +93,7 @@ function updateDate(date){
 				        <th> Deduction </th>
 				        <th> Total Exp </th>
 				        <th> Due Amt </th>
+				        <th> Close </th>
 				        <sec:authorize access="hasRole('ADMIN')">
 				        	<th >Edit </th>
 				        </sec:authorize>
@@ -111,7 +112,7 @@ function updateDate(date){
 					<tr>
 					 <c:set var="totals" value="${totals + transaction.totalAmount}" />
 					 <c:set var="totalExp" value="${totalExp + transaction.totalExpense}" />
-					 <c:set var="dueTotal" value="${dueTotal + transaction.dueAmount}" />
+					 <c:set var="dueTotal" value="${dueTotal + transaction.finalDue}" />
 						<td>${transaction.customer.firstName} ${transaction.customer.lastName} </td>
 						<td>${transaction.activityCreateDate}</td>
 						<td>${transaction.productType}</td>
@@ -124,7 +125,13 @@ function updateDate(date){
 					     <td>${transaction.otherExpense}</td>
 					     <td>${transaction.deductionPercent}</td>
 					     <td>${transaction.totalExpense}</td>
-					     <td>${transaction.dueAmount}</td>
+					     <td>${transaction.finalDue}</td>
+					     <c:if test="${transaction.status eq 'Open'}">
+        						<td><a href="<c:url value='/close-check-${transaction.id}' />" class="btn btn-success custom-width">Close</a></td>
+        				</c:if>
+        				<c:if test="${transaction.status eq 'Close'}">
+        				     <td><a href="<c:url value='/list-activity-${transaction.id}' />" class="btn btn-success custom-width">Details</a></td>
+        				</c:if>
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/edit-transaction-${transaction.id}' />" >edit</a></td>
 				        </sec:authorize>

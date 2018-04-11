@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sps.stores.application.ApplicationConstants;
 import com.sps.stores.model.Activity;
@@ -264,7 +266,8 @@ public class AppController extends AbstractAppController {
 	 * This method will provide the medium to add a new user.
 	 */
 	@RequestMapping(value = { "/newActivity" }, method = RequestMethod.GET)
-	public String newActivity(ModelMap model) {
+	public String newActivity(ModelMap model,HttpServletRequest request) {
+		
 		Activity activity = new Activity();
 		model.addAttribute("activity", activity);
 		model.addAttribute("edit", false);
@@ -275,6 +278,29 @@ public class AppController extends AbstractAppController {
 		
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "addactivity";
+	}
+	
+	@RequestMapping(value = { "/addActivity-{transId}-{locId}-{custId}" }, method = RequestMethod.GET)
+	public ModelAndView addActivity(@PathVariable String transId,@PathVariable String locId,@PathVariable String custId,ModelMap model,RedirectAttributes redir) {
+		
+		Activity activity = new Activity();
+		activity.setTransId(Integer.parseInt(transId));
+		model.addAttribute("activity", activity);
+		model.addAttribute("custId",custId);
+		model.addAttribute("locId",locId);
+		model.addAttribute("edit", false);
+		List<Customer> customers = customerService.findAllCustomers();
+		model.addAttribute("customers", customers);
+		List<Location> locations = locationService.findAllLocations();
+		model.addAttribute("locations",locations);
+		ModelAndView modelAndView = new ModelAndView("redirect:newActivity");
+		redir.addFlashAttribute("custId",custId);
+		redir.addFlashAttribute("locId",locId);
+		redir.addFlashAttribute("transId",transId);
+		redir.addFlashAttribute("loggedinuser",getPrincipal());
+		model.addAttribute("loggedinuser", getPrincipal());
+		return modelAndView;
+		
 	}
 	
 	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.GET)
@@ -464,23 +490,53 @@ public class AppController extends AbstractAppController {
 	@RequestMapping(value = { "/close-check-{id}" }, method = RequestMethod.GET)
 	public String closeCheck(@PathVariable String id, ModelMap model) {
 		Transaction transaction = transactionService.findById(Integer.parseInt(id));
-		List<Activity> openActivity = activityService.calculateAnyDueOnCustomer(transaction.getCustId());
-		if(openActivity.isEmpty()){
+		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId());
+		double amount = 0.00;
+		for(Activity act: activities){
+			if(act.getActivityType() != null && "Payment".equalsIgnoreCase(act.getActivityType())){
+				System.out.println("");
+				amount += Double.parseDouble(act.getAmount());
+			}
+		}
+		double transDue = Double.parseDouble(transaction.getDueAmount());
+		if(activities.isEmpty() || amount < transDue){
 			model.addAttribute("transaction",transaction);
-			return "closeConfirmation";
+			model.addAttribute("transId",transaction.getId());
+			model.addAttribute("custId",transaction.getCustId());
+			model.addAttribute("locId",transaction.getCustomer().getLocation());
+			model.addAttribute("activities", activities);
+			
+			List<Customer> customers = customerService.findAllCustomers();
+			model.addAttribute("customerList", customers);
+			List<Location> locations = locationService.findAllLocations();
+			model.addAttribute("locations",locations);
+			return "activityList";
 		}else
 		{
-			if(openActivity!= null && !openActivity.isEmpty()){
-				model.addAttribute("total",openActivity.get(openActivity.size()-1).getTotalAmount());
-				model.addAttribute("totalIntrest",openActivity.get(openActivity.size()-1).getTotalIntrest());
-				}
-		model.addAttribute("activities", openActivity);
 		model.addAttribute("transaction",transaction);
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "listactivities";
+		return "closeConfirmation";
 		}
 	}
 	
+	@RequestMapping(value = { "/list-activity-{transId}" }, method = RequestMethod.GET)
+	public String listPayments(@PathVariable String transId, ModelMap model) {
+		Transaction transaction = transactionService.findById(Integer.parseInt(transId));
+		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId());
+	
+			model.addAttribute("transaction",transaction);
+			
+			model.addAttribute("custId",transaction.getCustId());
+			model.addAttribute("locId",transaction.getCustomer().getLocation());
+			model.addAttribute("activities", activities);
+			
+			List<Customer> customers = customerService.findAllCustomers();
+			model.addAttribute("customerList", customers);
+			List<Location> locations = locationService.findAllLocations();
+			model.addAttribute("locations",locations);
+			return "activityList";
+		
+	}
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */
@@ -558,7 +614,7 @@ public class AppController extends AbstractAppController {
 	@RequestMapping(value = { "/delete-user-{ssoId}" }, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable String ssoId) {
 		userService.deleteUserBySSO(ssoId);
-		return "redirect:/list";
+		return "redirect:/home";
 	}
 	
 	/**

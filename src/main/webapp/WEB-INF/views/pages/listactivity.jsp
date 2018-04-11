@@ -39,9 +39,14 @@
 					</tr>
 		    	</thead>
 	    		<tbody>
+	    		 <c:set var="totals" value="${0}" />
+	    		 <c:set var="intrest" value="${0}" />
+	    		
 				<c:forEach items="${activities}" var="activity" varStatus="letterCounter"
                         begin="${pageStart}" end="${pageStart + perPage - 1}">
 					<tr>
+					<c:set var="totals" value="${totals + transaction.totalAmount}" />
+					 <c:set var="totalExp" value="${totalExp + transaction.totalExpense}" />
 						<td>${activity.owner.firstName} ${activity.owner.lastName} </td>
 						<td>${activity.activityCreateDate}</td>
 						<td>${activity.activityType}</td>

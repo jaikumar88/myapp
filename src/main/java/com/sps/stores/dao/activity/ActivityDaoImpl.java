@@ -84,4 +84,15 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 		return activities;
 	}
 
+	@Override
+	public List<Activity> findAllActivities(int transId) {
+		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
+		criteria.add(Restrictions.eq("transId", transId));
+		List<Activity> activities = (List<Activity>) criteria.list();
+		for(Activity activity : activities){
+			Hibernate.initialize(activity.getOwner());
+		}
+		return activities;
+	}
+
 }

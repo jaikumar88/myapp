@@ -63,7 +63,14 @@ function myFun(loc_id){
 							<option value="${cust.id}" ${cust.id == custId ? 'selected="selected"' : ''}>${cust.firstName} ${cust.lastName}</option>
 						</c:forEach>
 					</select>
-					<input type="submit" value="listActivity" class="btn btn-primary btn-sm"/>
+					<c:if test="${not empty transaction}">
+					
+					<a href="<c:url value='/addActivity-${transaction.id}-${locId}-${custId}' />" class="btn btn-success custom-width">Add Activity</a>
+					<a href="<c:url value='/home' />" class="btn btn-success custom-width">Cancel</a>
+					</c:if>
+					<c:if test="${empty transaction}">
+					<input type="submit" value="List Activity" class="btn btn-primary btn-sm"/>
+					</c:if>
 					
 			<table class="table table-hover">
 	    		<thead>
@@ -117,9 +124,17 @@ function myFun(loc_id){
 					</tr>
 				</c:forEach>
 				  <tr>  <td> Total Due </td>
+				       <c:if test="${not empty transaction}">
+				       <td>${transaction.dueAmount - amountTotals}</td>
+				       <td> </td>
+						<td></td>
+				       </c:if>
+				       <c:if test="${empty transaction}">
 				  		<td>${amountTotals + totalIntrest}</td>
-						<td>Total Intrest </td>
+				  		<td>Total Intrest </td>
 						<td>${totalIntrest}</td>
+				  		</c:if>
+						
 						<td></td>
 					    <td></td>
 					     <td></td>

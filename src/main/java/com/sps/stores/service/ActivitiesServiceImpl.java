@@ -125,4 +125,10 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 		
 	}
 
+	@Override
+	public List<Activity> getAllActivityForTransaction(int transId) {
+		
+		return activityDao.findAllActivities(transId);
+	}
+
 }

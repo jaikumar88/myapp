@@ -20,5 +20,5 @@ public interface PartnerTransactionDao {
 	
 	List<PartnerTransaction> findAllPartnerTransactionsByPartnerId(String partnerId,String startDate,String endDate);
 	
-	void delete(PartnerTransaction partner);
+	void delete(PartnerTransaction  partner);
 }

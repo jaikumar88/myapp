@@ -22,4 +22,6 @@ public interface ActivityDao {
 	void delete(Activity activity);
 	
 	List<Activity> findAllActivities(String location,String custId, String date);
+	
+	List<Activity> findAllActivities(int transId);
 }

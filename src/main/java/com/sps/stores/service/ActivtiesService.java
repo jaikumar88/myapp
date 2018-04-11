@@ -21,5 +21,8 @@ public interface ActivtiesService {
 	List<Activity> findAllActivitiesByDate(String date); 
 	
 	List<Activity> findAllActivities(String location,String custId, String date);
+	
 	List<Activity> calculateAnyDueOnCustomer(int custId);
+	
+	List<Activity> getAllActivityForTransaction(int transId);
 }

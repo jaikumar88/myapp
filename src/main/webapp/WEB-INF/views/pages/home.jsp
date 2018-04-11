@@ -57,7 +57,7 @@
 					     <td>${transaction.otherExpense}</td>
 					     <td>${transaction.deductionPercent}</td>
 					     <td>${transaction.totalExpense}</td>
-					     <td>${transaction.dueAmount}</td>
+					     <td>${transaction.finalDue}</td>
 					     <sec:authorize access="hasRole('ADMIN')">
 							<td><a href="<c:url value='/edit-transaction-${transaction.id}' />" >edit</a></td>
 				        </sec:authorize>
@@ -69,7 +69,9 @@
         				<c:if test="${transaction.status eq 'Open'}">
         						<a href="<c:url value='/close-check-${transaction.id}' />" class="btn btn-success custom-width">Close</a>
         				</c:if>
-        				
+        				<c:if test="${transaction.status eq 'Close'}">
+        				     <a href="<c:url value='/list-activity-${transaction.id}' />" class="btn btn-success custom-width">Check</a>
+        				</c:if>
         				</td>
 					</tr>
 				</c:forEach>

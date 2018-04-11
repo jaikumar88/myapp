@@ -54,10 +54,10 @@ function myFun(loc_id){
 		<div class="well lead">Add New Activity</div>
 		
 		<div class="none"> </div>
-	 	<form:form method="POST" modelAttribute="activity" class="form-horizontal">
+	 	<form:form method="POST" modelAttribute="activity" action="newActivity" class="form-horizontal">
 			<form:input type="hidden" path="id" id="id"/>
-
 			
+			<form:input type="hidden" path="transId" id="transId" value="${transId}" />
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="locId">Location: </label>
 					<div class="col-md-7">
@@ -82,7 +82,7 @@ function myFun(loc_id){
 						<select name="custId" id="custId">
 					    <option value="">Select</option>
 						<c:forEach items="${customerList}" var="cust" varStatus="letterCounter">
-							<option value="${cust.id}">${cust.firstName}</option>
+							<option value="${cust.id}" ${cust.id == custId ? 'selected="selected"' : ''} >${cust.firstName} ${cust.lastName}</option>
 						</c:forEach>
 						</select>
 						<div class="has-error">

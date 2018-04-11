@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sps.stores.application.AppUtil;
+import com.sps.stores.dao.activity.ActivityDao;
 import com.sps.stores.dao.transaction.TransactionDao;
+import com.sps.stores.model.Activity;
 import com.sps.stores.model.Transaction;
 
 @Service("transactionService")
@@ -17,6 +19,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	TransactionDao transactionDao;
+	
+	@Autowired
+	ActivityDao activityDao;
 	
 	@Autowired
 	AppUtil appUtil;
@@ -62,8 +67,17 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<Transaction> findAllTransactionsByDate(String date) {
+		List<Transaction> transactions = transactionDao.findAllTransactionByDate(appUtil.stringToDate(date));
 		
-		return transactionDao.findAllTransactionByDate(appUtil.stringToDate(date));
+		for(Transaction trans: transactions){
+			double dueAmount = 0.00;
+			List<Activity> activities = activityDao.findAllActivities(trans.getId());
+			for(Activity activity: activities){
+				dueAmount += Double.parseDouble(activity.getAmount());
+			}
+			trans.setFinalDue(String.valueOf(Double.parseDouble(trans.getDueAmount()) - dueAmount));
+		}
+		return transactions;
 	}
 
 	/**
@@ -74,9 +88,18 @@ public class TransactionServiceImpl implements TransactionService {
 			Date dt = null;
 			if(date != null && !"".equalsIgnoreCase(date))
 			dt = appUtil.stringToDate(date);
-			
+			List<Transaction> transactions = transactionDao.findAllTransactions(location, custId, dt);
+			for(Transaction trans: transactions){
+				double dueAmount = 0.00;
+				List<Activity> activities = activityDao.findAllActivities(trans.getId());
+				for(Activity activity: activities){
+					dueAmount += Double.parseDouble(activity.getAmount());
+				}
+				trans.setFinalDue(String.valueOf(Double.parseDouble(trans.getDueAmount()) - dueAmount));
+			}
+			return transactions;
 		
-			return transactionDao.findAllTransactions(location, custId, dt);
+		
 	}
 
 	@Override
@@ -93,7 +116,17 @@ public class TransactionServiceImpl implements TransactionService {
 		stDate = appUtil.stringToDate(startDate);
 		if(endDate != null && !"".equalsIgnoreCase(endDate))
 			edDate = appUtil.stringToDate(endDate);
-		return transactionDao.findAllTransactions(location, custId, stDate, edDate);
+		List<Transaction> transactions = transactionDao.findAllTransactions(location, custId, stDate, edDate);
+		for(Transaction trans: transactions){
+			double dueAmount = 0.00;
+			List<Activity> activities = activityDao.findAllActivities(trans.getId());
+			for(Activity activity: activities){
+				dueAmount += Double.parseDouble(activity.getAmount());
+			}
+			trans.setFinalDue(String.valueOf(Double.parseDouble(trans.getDueAmount()) - dueAmount));
+		}
+		return transactions;
+		
 	}
 
 }
