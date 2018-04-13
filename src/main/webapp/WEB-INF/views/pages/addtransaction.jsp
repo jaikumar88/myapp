@@ -105,7 +105,7 @@ function updateSubTotal(){
 						Shop No:
 						<select name="partnerId" id="partnerId">
 					    <c:forEach items="${partners}" var="partner" varStatus="letterCounter">
-							<option value="${partner.id}">${partner.shopNo}</option>
+							<option value="${partner.id}">${partner.firstName} ${partner.lastName}</option>
 						</c:forEach>
 						</select>
 						
