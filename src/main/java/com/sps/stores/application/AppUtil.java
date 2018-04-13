@@ -18,4 +18,6 @@ public interface AppUtil {
 	public Date stringToDate(String date);
 	
 	public java.util.Date stringToUtilDate(String date);
+	
+	public String calculateIntrestBetween(String amount,String startDate,String intRate,String endDate);
 }

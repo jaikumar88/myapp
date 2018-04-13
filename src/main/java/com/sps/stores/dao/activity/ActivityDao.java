@@ -24,4 +24,6 @@ public interface ActivityDao {
 	List<Activity> findAllActivities(String location,String custId, String date);
 	
 	List<Activity> findAllActivities(int transId);
+	
+	List<Activity> findAllActivities(int transId,boolean isPartnerTrans);
 }

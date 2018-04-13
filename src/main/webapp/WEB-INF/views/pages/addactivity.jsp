@@ -57,6 +57,7 @@ function myFun(loc_id){
 	 	<form:form method="POST" modelAttribute="activity" action="newActivity" class="form-horizontal">
 			<form:input type="hidden" path="id" id="id"/>
 			
+			<form:input type="hidden" path="partnerTransId" id="partnerTransId" value="${partnerTransId}" />
 			<form:input type="hidden" path="transId" id="transId" value="${transId}" />
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="locId">Location: </label>

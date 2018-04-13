@@ -24,6 +24,9 @@ public class PartnerServiceImpl implements PartnerService {
 	PartnerTransactionDao partnerTransactionDao;
 	
 	@Autowired
+	PartnerTransService partnerTransService;
+	
+	@Autowired
 	AppUtil appUtil;
 	
 	@Override
@@ -63,7 +66,7 @@ public class PartnerServiceImpl implements PartnerService {
 		List<Partner> listPartners = partnerDao.findAllPartners();
 		
 		for(Partner partner:listPartners){
-			double dueAmount = calculateTotalDueAmount(partnerTransactionDao.findAllPartnerTransactionsByPartnerId(String.valueOf(partner.getId())));
+			double dueAmount = calculateTotalDueAmount(partnerTransService.findAllPartnerTrans(String.valueOf(partner.getId()),null,null));
 			partner.setDueAmount(String.valueOf(appUtil.formatDouble(dueAmount)));
 		}
 		return listPartners;
@@ -78,7 +81,7 @@ public class PartnerServiceImpl implements PartnerService {
 		double totdueAmount  = 0.00;
 			for(PartnerTransaction trans:listTrans){
 				if(trans.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
-					totdueAmount+=appUtil.formatDouble(Double.parseDouble(trans.getTotalAmount()));
+					totdueAmount+=appUtil.formatDouble(Double.parseDouble(trans.getDueAmount()));
 					}
 				}
 			

@@ -24,5 +24,5 @@ public interface ActivtiesService {
 	
 	List<Activity> calculateAnyDueOnCustomer(int custId);
 	
-	List<Activity> getAllActivityForTransaction(int transId);
+	List<Activity> getAllActivityForTransaction(int transId,boolean isPartner);
 }

@@ -35,7 +35,7 @@ public class AppUtilImpl implements AppUtil{
 			String inputAmt = amount.equalsIgnoreCase("")?"0.00":amount;
 			String rate = intRate.equalsIgnoreCase("")?"0.00":intRate;
 			try {
-				List<String> monthsAndDays = calculateMonthsAndDaysBetweenDates(startDate);
+				List<String> monthsAndDays = calculateMonthsAndDaysBetweenDates(startDate,format.format(new Date()));
 				if(!monthsAndDays.isEmpty()){
 					if(monthsAndDays.get(0) != null){
 						double amt = Double.parseDouble(inputAmt);
@@ -66,14 +66,51 @@ public class AppUtilImpl implements AppUtil{
 			return String.valueOf(instAmt);
 		}
 		
-		public List<String> calculateMonthsAndDaysBetweenDates(String startDate) throws ParseException{
+public String calculateIntrestBetween(String amount,String startDate,String intRate,String endDate){
+			
+			double instAmt = 0.00;
+			String inputAmt = amount.equalsIgnoreCase("")?"0.00":amount;
+			String rate = intRate.equalsIgnoreCase("")?"0.00":intRate;
+			try {
+				List<String> monthsAndDays = calculateMonthsAndDaysBetweenDates(startDate,endDate);
+				if(!monthsAndDays.isEmpty()){
+					if(monthsAndDays.get(0) != null){
+						double amt = Double.parseDouble(inputAmt);
+						int months = Integer.parseInt(monthsAndDays.get(0));
+						double rt = Double.parseDouble(rate);
+						
+						 instAmt += (amt*rt*months)/100;
+						
+					}
+					if(monthsAndDays.get(1) != null){
+						
+						double amt = Double.parseDouble(inputAmt);
+						int days = Integer.parseInt(monthsAndDays.get(1));
+						double rt = Double.parseDouble(rate);
+						Date today = new Date();
+						Calendar c = Calendar.getInstance();
+						c.setTime(today);
+						System.out.println("No of days in this months "+c.getActualMaximum(Calendar.DAY_OF_MONTH));
+						
+						 instAmt += (amt*rt*days)/(100*c.getActualMaximum(Calendar.DAY_OF_MONTH));
+					}
+				}
+			} catch (ParseException e) {
+				
+				e.printStackTrace();
+			}
+			instAmt =(double) Math.round(instAmt*100)/100;
+			return String.valueOf(instAmt);
+		}
+		
+		public List<String> calculateMonthsAndDaysBetweenDates(String startDate,String endDate) throws ParseException{
 			List<String> monthsAndDays = new ArrayList();
 		    SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 		    String CURRDATE    = startDate;
 		     
 
 		    Date startdate = formatter.parse(CURRDATE);
-		    Date enddate   = new Date();
+		    Date enddate   = formatter.parse(endDate);
 
 		    Calendar startCalendar = new GregorianCalendar();
 		    startCalendar.setTime(startdate);

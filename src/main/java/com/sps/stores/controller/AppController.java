@@ -490,7 +490,7 @@ public class AppController extends AbstractAppController {
 	@RequestMapping(value = { "/close-check-{id}" }, method = RequestMethod.GET)
 	public String closeCheck(@PathVariable String id, ModelMap model) {
 		Transaction transaction = transactionService.findById(Integer.parseInt(id));
-		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId());
+		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId(),false);
 		double amount = 0.00;
 		for(Activity act: activities){
 			if(act.getActivityType() != null && "Payment".equalsIgnoreCase(act.getActivityType())){
@@ -522,7 +522,7 @@ public class AppController extends AbstractAppController {
 	@RequestMapping(value = { "/list-activity-{transId}" }, method = RequestMethod.GET)
 	public String listPayments(@PathVariable String transId, ModelMap model) {
 		Transaction transaction = transactionService.findById(Integer.parseInt(transId));
-		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId());
+		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId(),false);
 	
 			model.addAttribute("transaction",transaction);
 			

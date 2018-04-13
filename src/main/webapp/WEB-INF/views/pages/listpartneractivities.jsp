@@ -38,29 +38,19 @@ function myFun(loc_id){
   
   
 }
-function updateDate(date){
-	alert(date.value);
-	document.getElementById("transDate").value = date.value;
-}
-
-function validateDate(endDt){
-	var stDate = document.getElementById("startDate").value;
-	if(stDate > endDt.value)
-		alert()
-}
 </script>
 
 
-<c:set var="totalCount" scope="session" value="${fn:length(partnertrans)}"/>
+
+<c:set var="letters" scope="session" value="${activities}"/>
+<c:set var="totalCount" scope="session" value="${fn:length(activities)}"/>
 <c:set var="perPage" scope="session"  value="10"/>
 <c:set var="pageStart" value="${param.start}"/>
-<c:set var="customerList" scope="session" value="${partnerList}"/>
+<c:set var="customerList" scope="session" value="${customerList}"/>
 
 <div  class="well">
   <form:form method="POST"  class="form-horizontal">
- 
-  
-		<div id="selectDiv">  Select the Partner name </div>
+		<div id="selectDiv">  Select the Location name and customer name </div>
 		
 					
 					<select name="partnerId" id="partnerId">
@@ -73,20 +63,30 @@ function validateDate(endDt){
 					<input type="date" id="startDate" name="startDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' />
 					
 					<input type="date" id="endDate" name="endDate" class="input-sm" value='<%=(new SimpleDateFormat("YYYY-MM-dd")).format(new java.util.Date())%>' onchange="validateDate(this)"/>
-					<input type="submit" value="listTransaction" class="btn btn-primary btn-sm"/>
+					
+					
+					<c:if test="${not empty transaction}">
+					
+					<a href="<c:url value='/addPartnerActivity-${transaction.id}' />" class="btn btn-success custom-width">Add Activity</a>
+					<a href="<c:url value='/home' />" class="btn btn-success custom-width">Cancel</a>
+					</c:if>
+					<c:if test="${empty transaction}">
+					<input type="submit" value="List Activity" class="btn btn-primary btn-sm"/>
+					</c:if>
 					
 			<table class="table table-hover">
 	    		<thead>
 		      		<tr>
 				        <th>Partner Name</th>
 				        <th>Date</th>
-				        <th>Product Type </th>
-				        <th>Weight </th>
-				        <th>No Of Piece </th>
-				        <th>Rate</th>
-				        <th> Total Amount </th>
-				        <th>Final Due</th>
-				        <th> Close </th>
+				        <th>Activity Type </th>
+				        <th>Details </th>
+				        <th>Amount </th>
+				        <th>Intrest</th>
+				        <th> Status </th>
+				        <sec:authorize access="hasRole('ADMIN')">
+				        	<th >Close </th>
+				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
 				        	<th >Edit </th>
 				        </sec:authorize>
@@ -97,50 +97,51 @@ function validateDate(endDt){
 					</tr>
 		    	</thead>
 	    		<tbody>
-	    		<c:set var="totals" value="${0}" />
-	    		 <c:set var="dueTotal" value="${0}" />
-				<c:forEach items="${partnertrans}" var="transaction" varStatus="letterCounter"
+	    		<c:set var="amountTotals" value="${0}" />
+	    		 <c:set var="totalIntrest" value="${0}" />
+
+				<c:forEach items="${activities}" var="activity" varStatus="letterCounter"
                         begin="${pageStart}" end="${pageStart + perPage - 1}">
 					<tr>
-					    <c:set var="totals" value="${totals + transaction.totalAmount}" />
-					    <c:set var="dueTotal" value="${dueTotal + transaction.finalDue}" />
-						<td>${transaction.partner.firstName} ${transaction.partner.lastName} </td>
-						<td>${transaction.activityCreateDate}</td>
-						<td>${transaction.productType}</td>
-						<td>${transaction.weight}</td>
-						<td>${transaction.quantity}</td>
-					    <td>${transaction.rate}</td>
-					     <td>${transaction.totalAmount}</td>
-					     <td>${transaction.finalDue}</td>
-					      <c:if test="${transaction.status eq 'Open'}">
-        						<td><a href="<c:url value='/close-partner-check-${transaction.id}' />" class="btn btn-success custom-width">Close</a></td>
-        				</c:if>
-        				<c:if test="${transaction.status eq 'Close'}">
-        				     <td><a href="<c:url value='/list-partner-activity-${transaction.id}' />" class="btn btn-success custom-width">Details</a></td>
-        				</c:if>
+					  <c:if test="${activity.status eq 'Open' }">
+					  <c:set var="amountTotals" value="${amountTotals + activity.amount}" />
+					  <c:set var="totalIntrest" value="${totalIntrest + activity.intrest}" />
+					  </c:if>
+						<td>${activity.owner.firstName} ${activity.owner.lastName} </td>
+						<td>${activity.activityCreateDate}</td>
+						<td>${activity.activityType}</td>
+						<td>${activity.memo}</td>
+						<td>${activity.amount}</td>
+					    <td>${activity.intrest}</td>
+					     <td>${activity.status}</td>
+					     <sec:authorize access="hasRole('USER') or hasRole('ADMIN')">
+							<td><a href="<c:url value='/closeActivity-${activity.id}' />" class="btn btn-success custom-width">Close</a></td>
+				        </sec:authorize>
 					     <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/edit-partnertrans-${transaction.id}' />" >edit</a></td>
+							<td><a href="<c:url value='/edit-activity-${activity.id}' />" >edit</a></td>
 				        </sec:authorize>
 				        <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/delete-partnertrans-${transaction.id}' />" >delete</a></td>
+							<td><a href="<c:url value='/delete-activity-${activity.id}' />" >delete</a></td>
         				</sec:authorize>
 					</tr>
 				</c:forEach>
-				  <tr>  <td> Total </td>
-				  		<td></td>
+				  <tr>  <td> Total Due </td>
+				       <c:if test="${not empty transaction}">
+				       <td>${transaction.totalAmount - amountTotals}</td>
+				       <td> </td>
+						<td></td>
+				       </c:if>
+				       <c:if test="${empty transaction}">
+				  		<td>${amountTotals + totalIntrest}</td>
+				  		<td>Total Intrest </td>
+						<td>${totalIntrest}</td>
+				  		</c:if>
 						
+						<td></td>
 					    <td></td>
 					     <td></td>
 					     <td></td>
 					     <td></td>
-					     
-					     
-					     <td>${totals}</td>
-					     <td>${dueTotal}</td>
-					     <td>
-					     <sec:authorize access="hasRole('ADMIN')">
-							<td><a href="<c:url value='/download/trans.pdf?custID=${custId}' />" class="btn btn-success custom-width">Print</a></td>
-        				</sec:authorize>
 	    		</tbody>
 	    	</table>
 			<c:if test="${empty pageStart or pageStart < 0}">
@@ -149,8 +150,8 @@ function validateDate(endDt){
 <c:if test="${totalCount < pageStart}">
        <c:set var="pageStart" value="${pageStart - 10}"/>
 </c:if>
-    <a href="${pageContext.request.contextPath}/partnerTransList?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
-    <a href="${pageContext.request.contextPath}/partnerTransList?start=${pageStart + 10}">Next</a>  
+    <a href="${pageContext.request.contextPath}/home?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
+    <a href="${pageContext.request.contextPath}/home?start=${pageStart + 10}">Next</a>  
     </form:form>
 </div>
 

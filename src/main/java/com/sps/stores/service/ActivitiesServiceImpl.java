@@ -100,8 +100,7 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 			for(Activity activity:listActivity){
 				if(activity.getStatus().equalsIgnoreCase(ApplicationConstants.OPEN.value())){
 				if(activity.getActivityCreateDate() != null && activity.getAmount() != null && 
-						(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.PAYMENT.value()) || 
-						activity.getActivityType().equalsIgnoreCase(ApplicationConstants.ADVANCE.value())))
+						activity.getActivityType().equalsIgnoreCase(ApplicationConstants.ADVANCE.value()))
 				{
 					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
 					totInterest += Double.valueOf(intrestAmt);
@@ -110,7 +109,7 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 					activity.setIntrestAmount(intrestAmt);
 					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
 					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
-					}
+					
 				} else if(activity.getActivityType().equalsIgnoreCase(ApplicationConstants.RECEIVED.value())){
 					String intrestAmt = appUtil.calculateIntrestAsOfToday(activity.getAmount(), activity.getActivityCreateDate(), activity.getIntrestrate());
 					activity.setIntrest(intrestAmt);
@@ -120,15 +119,16 @@ public class ActivitiesServiceImpl implements ActivtiesService {
 					activity.setTotalIntrest(String.valueOf(appUtil.formatDouble(totInterest)));
 					activity.setTotalAmount(String.valueOf(appUtil.formatDouble(totdueAmount)));
 				}
+				}
 			}
 		return listActivity;
 		
 	}
 
 	@Override
-	public List<Activity> getAllActivityForTransaction(int transId) {
+	public List<Activity> getAllActivityForTransaction(int transId,boolean isPartnerTrans) {
 		
-		return activityDao.findAllActivities(transId);
+		return activityDao.findAllActivities(transId,isPartnerTrans);
 	}
 
 }

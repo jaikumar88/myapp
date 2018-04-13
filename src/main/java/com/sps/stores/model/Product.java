@@ -20,6 +20,12 @@ public class Product {
 	@Column(name="PRODUCT_DESC",nullable=false)
 	private String description;
 	
+	@Column(name="NO_DAYS",nullable=false)
+	private String noOfDaysFree;
+	
+	@Column(name="INT_RATE",nullable=false)
+	private String intrestRate;
+	
 	@Column(name="TS_CRT",nullable=true)
 	private String creationDate;
 	
@@ -155,6 +161,34 @@ public class Product {
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", creationDate="
 				+ creationDate + ", updateDate=" + updateDate + "]";
+	}
+
+	/**
+	 * @return the noOfDaysFree
+	 */
+	public String getNoOfDaysFree() {
+		return noOfDaysFree;
+	}
+
+	/**
+	 * @param noOfDaysFree the noOfDaysFree to set
+	 */
+	public void setNoOfDaysFree(String noOfDaysFree) {
+		this.noOfDaysFree = noOfDaysFree;
+	}
+
+	/**
+	 * @return the intrestRate
+	 */
+	public String getIntrestRate() {
+		return intrestRate;
+	}
+
+	/**
+	 * @param intrestRate the intrestRate to set
+	 */
+	public void setIntrestRate(String intrestRate) {
+		this.intrestRate = intrestRate;
 	}
 
 }

@@ -165,8 +165,8 @@ function updateDate(date){
 <c:if test="${totalCount < pageStart}">
        <c:set var="pageStart" value="${pageStart - 10}"/>
 </c:if>
-    <a href="${pageContext.request.contextPath}/listTransaction?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
-    <a href="${pageContext.request.contextPath}/listTransaction?start=${pageStart + 10}">Next</a>  
+    <a href="${pageContext.request.contextPath}/transactionList?start=${pageStart - 10}">Previous</a>${pageStart + 1} - ${pageStart + 10} 
+    <a href="${pageContext.request.contextPath}/transactionList?start=${pageStart + 10}">Next</a>  
     </form:form>
 </div>
 

@@ -85,14 +85,22 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 	}
 
 	@Override
-	public List<Activity> findAllActivities(int transId) {
+	public List<Activity> findAllActivities(int transId,boolean isPartner) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
-		criteria.add(Restrictions.eq("transId", transId));
+		if(isPartner)
+		criteria.add(Restrictions.eq("partnerTransId", transId));
+		else 
+			criteria.add(Restrictions.eq("transId", transId));
 		List<Activity> activities = (List<Activity>) criteria.list();
 		for(Activity activity : activities){
 			Hibernate.initialize(activity.getOwner());
 		}
 		return activities;
+	}
+	
+	@Override
+	public List<Activity> findAllActivities(int transId) {
+		return findAllActivities(transId, false);
 	}
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -23,6 +24,9 @@ public class PartnerTransaction {
 	
 	@Column(name="PARTNER_ID",nullable=false)
 	private int partnerId;
+	
+	@Column(name="CUST_ID",nullable=false,columnDefinition = "int default 0")
+	private int custId;
 	
 	@Type(type="date")
 	@Column(name="CREATE_DATE",nullable=false)
@@ -78,6 +82,9 @@ public class PartnerTransaction {
 	@JoinColumn(name="PARTNER_ID",referencedColumnName = "ID", nullable = false, updatable = false, insertable = false)
 	private Partner partner;
 
+	@Transient
+	private String finalDue;
+	
 	/**
 	 * @return the id
 	 */
@@ -488,5 +495,33 @@ public class PartnerTransaction {
 				+ ", otherExpense=" + otherExpense + ", deductionPercent=" + deductionPercent + ", totalExpense="
 				+ totalExpense + ", dueAmount=" + dueAmount + ", status=" + status + ", closeDate=" + closeDate
 				+ ", creationDate=" + creationDate + ", updateDate=" + updateDate + ", partner=" + partner + "]";
+	}
+
+	/**
+	 * @return the custId
+	 */
+	public int getCustId() {
+		return custId;
+	}
+
+	/**
+	 * @param custId the custId to set
+	 */
+	public void setCustId(int custId) {
+		this.custId = custId;
+	}
+
+	/**
+	 * @return the finalDue
+	 */
+	public String getFinalDue() {
+		return finalDue;
+	}
+
+	/**
+	 * @param finalDue the finalDue to set
+	 */
+	public void setFinalDue(String finalDue) {
+		this.finalDue = finalDue;
 	}
 }

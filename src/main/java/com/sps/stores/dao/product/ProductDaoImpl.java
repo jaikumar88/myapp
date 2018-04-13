@@ -38,6 +38,16 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
 		
 	}
 
+	@Override
+	public Product findByProductType(String type) {
+		
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("name"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Product> products = (List<Product>) criteria.list();
+		
+		return products.get(0);
+	}
+
 	
 
 }

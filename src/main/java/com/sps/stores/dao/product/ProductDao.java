@@ -16,4 +16,6 @@ public interface ProductDao {
 	
 	
 	void delete(Product product);
+	
+	Product findByProductType(String type);
 }
