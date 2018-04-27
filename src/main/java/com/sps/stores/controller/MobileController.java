@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sps.stores.application.ApplicationConstants;
+import com.sps.stores.model.Activity;
 import com.sps.stores.model.Customer;
 import com.sps.stores.model.Greeting;
 import com.sps.stores.model.Location;
@@ -108,6 +109,30 @@ public class MobileController extends AbstractAppController {
 	@RequestMapping(value = { "/mProductList" }, method = RequestMethod.GET)
 	public List<Product> listCustomer() {
 		return productService.findAllProducts();
+	}
+	
+	@RequestMapping(value = { "/mNewCustomer" }, method = RequestMethod.POST)
+	public Customer saveCustomer(@RequestBody Customer customer) {
+		customerService.saveCustomer(customer);
+		return customer;
+	}
+	
+	@RequestMapping(value = { "/mNewLocation" }, method = RequestMethod.POST)
+	public Location saveLocation(@RequestBody Location location) {
+		locationService.saveLocation(location);
+		return location;
+	}
+	
+	@RequestMapping(value = { "/mNewProduct" }, method = RequestMethod.POST)
+	public Product saveLocation(@RequestBody Product product) {
+		productService.saveProduct(product);
+		return product;
+	}
+	
+	@RequestMapping(value = { "/mNewActivity" }, method = RequestMethod.POST)
+	public Activity saveActivity(@RequestBody Activity activity) {
+		activityService.saveActivity(activity);
+		return activity;
 	}
 	
 	
