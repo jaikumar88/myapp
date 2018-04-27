@@ -94,6 +94,9 @@ public class Transaction {
 
 	@Transient
 	private String finalDue;
+	
+	@Transient
+	private String partnerId;
 	/**
 	 * @return the id
 	 */
@@ -510,6 +513,20 @@ public class Transaction {
 	 */
 	public void setFinalDue(String finalDue) {
 		this.finalDue = finalDue;
+	}
+
+	/**
+	 * @return the partnerId
+	 */
+	public String getPartnerId() {
+		return partnerId;
+	}
+
+	/**
+	 * @param partnerId the partnerId to set
+	 */
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
 	}
 	
 

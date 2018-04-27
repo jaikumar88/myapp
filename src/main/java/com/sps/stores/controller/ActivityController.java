@@ -158,4 +158,16 @@ public class ActivityController extends AbstractAppController{
 			return "activityList";
 		
 	}
+	
+	@RequestMapping(value = { "/delete-activity-{id}" }, method = {RequestMethod.GET,RequestMethod.POST})
+	public String deleteTransaction(@PathVariable String id, ModelMap model) {
+		
+		activityService.deleteActivityByActivityId(id);
+		
+		model.addAttribute("success", "Transaction For customer " + id +" deleted successfully");
+		model.addAttribute("loggedinuser", getPrincipal());
+		
+		return "addactivitysuccess";
+	}
+
 }

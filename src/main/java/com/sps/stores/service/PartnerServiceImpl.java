@@ -37,8 +37,8 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Override
 	public Partner findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return partnerDao.findByName(name);
+		
 	}
 
 	@Override

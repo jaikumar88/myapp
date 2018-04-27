@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import com.sps.stores.model.Customer;
 import com.sps.stores.model.Greeting;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
+import com.sps.stores.model.Product;
 import com.sps.stores.model.Transaction;
 
 @RestController
@@ -94,10 +96,19 @@ public class MobileController extends AbstractAppController {
 	}
 	
 	@RequestMapping(value = { "/mNewTransaction" }, method = RequestMethod.POST)
-	public Transaction saveTransaction(Transaction transaction) {
+	public Transaction saveTransaction(@RequestBody Transaction transaction) {
+		
 		transaction.setStatus(ApplicationConstants.OPEN.value());
+		Partner partner = partnerService.findByName(transaction.getPartnerId());
 		transactionService.saveTransaction(transaction);
-		partnerTransService.savePartnerTrans(transaction,"1");
+		partnerTransService.savePartnerTrans(transaction,String.valueOf(partner.getId()));
 		return transaction;
 	}
+	
+	@RequestMapping(value = { "/mProductList" }, method = RequestMethod.GET)
+	public List<Product> listCustomer() {
+		return productService.findAllProducts();
+	}
+	
+	
 }

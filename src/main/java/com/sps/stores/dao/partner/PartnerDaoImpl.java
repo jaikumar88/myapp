@@ -44,8 +44,21 @@ public class PartnerDaoImpl extends AbstractDao<Integer, Partner> implements Par
 
 	@Override
 	public Partner findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] array = {};
+		if(name != null)
+			array = name.split(" ");
+		String fName="";
+		String lName="";
+		if(array.length>1){
+			fName = array[0];
+			lName = array[1];
+		} else if(array.length > 0 ){
+			fName = array[0];
+		}
+		Criteria crit = createEntityCriteria();
+		crit.add(Restrictions.eq("firstName", fName));
+		crit.add(Restrictions.eq("lastName", lName));
+		return (Partner)crit.uniqueResult();
 	}
 
 
@@ -53,6 +66,7 @@ public class PartnerDaoImpl extends AbstractDao<Integer, Partner> implements Par
 	public List<Partner> findAllPartners() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("shopNo"));
 		List<Partner> partners = criteria.list();
+		
 		return partners;
 		
 	}
