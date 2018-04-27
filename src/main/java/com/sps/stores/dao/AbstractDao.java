@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Jai1.Kumar
- *
+ * This class provides basic functions
  * @param <PK>
  * @param <T>
  */
