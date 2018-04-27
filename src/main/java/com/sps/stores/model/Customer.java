@@ -11,8 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 @Entity
 @Table(name="CUSTOMER")
+@JsonAutoDetect
 public class Customer {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)

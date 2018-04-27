@@ -37,7 +37,7 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 	public List<Activity> findAllActivities() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Activity> activities = (List<Activity>) criteria.list();
+		List<Activity> activities = criteria.list();
 		for(Activity activity : activities){
 			Hibernate.initialize(activity.getOwner());
 		}
@@ -49,7 +49,7 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
 		criteria.add(Restrictions.eq("activityCreateDate", date));
-		List<Activity> activities = (List<Activity>) criteria.list();
+		List<Activity> activities = criteria.list();
 		for(Activity activity : activities){
 			Hibernate.initialize(activity.getOwner());
 		}
@@ -77,7 +77,7 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 		if(custId != null)
 		criteria.add(Restrictions.eq("custId", Integer.parseInt(custId)));
 		//criteria.add(Restrictions.gt("activityCreateDate", date));
-		List<Activity> activities = (List<Activity>) criteria.list();
+		List<Activity> activities = criteria.list();
 		for(Activity activity : activities){
 			Hibernate.initialize(activity.getOwner());
 		}
@@ -91,7 +91,7 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 		criteria.add(Restrictions.eq("partnerTransId", transId));
 		else 
 			criteria.add(Restrictions.eq("transId", transId));
-		List<Activity> activities = (List<Activity>) criteria.list();
+		List<Activity> activities = criteria.list();
 		for(Activity activity : activities){
 			Hibernate.initialize(activity.getOwner());
 		}

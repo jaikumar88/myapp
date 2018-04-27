@@ -3,6 +3,7 @@ package com.sps.stores.dao.location;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
@@ -32,8 +33,8 @@ public class LocationDaoImpl extends AbstractDao<Integer, Location> implements L
 	@Override
 	public List<Location> findAllLocations() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("location"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Location> locations = (List<Location>) criteria.list();
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Location> locations = criteria.list();
 		return locations;
 		
 	}

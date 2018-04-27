@@ -52,7 +52,7 @@ public class PartnerDaoImpl extends AbstractDao<Integer, Partner> implements Par
 	@Override
 	public List<Partner> findAllPartners() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("shopNo"));
-		List<Partner> partners = (List<Partner>) criteria.list();
+		List<Partner> partners = criteria.list();
 		return partners;
 		
 	}

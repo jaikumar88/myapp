@@ -3,6 +3,7 @@ package com.sps.stores.dao.store;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -46,22 +47,24 @@ public class StoreDaoImpl extends AbstractDao<Integer, Store> implements StoreDa
 		delete(store);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Store> findAllStores() {
 		
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("country"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Store> stores = (List<Store>) criteria.list();
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Store> stores = criteria.list();
 		return stores;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Store> findAllStoresByStoreId(String storeId) {
 		
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("country"));
 		criteria.add(Restrictions.eq("storeId", storeId));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Store> stores = (List<Store>) criteria.list();
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Store> stores = criteria.list();
 		return stores;
 	}
 

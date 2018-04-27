@@ -2,7 +2,6 @@ package com.sps.stores.service;
 
 import java.util.List;
 
-import com.sps.stores.model.Partner;
 import com.sps.stores.model.PartnerTransaction;
 import com.sps.stores.model.Transaction;
 

@@ -24,11 +24,12 @@ import com.sps.stores.model.Activity;
 @Transactional
 public class AppUtilImpl implements AppUtil{
 
-	SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	
 
 	
+		@Override
 		public String calculateIntrestAsOfToday(String amount,String startDate,String intRate){
 			
 			double instAmt = 0.00;
@@ -66,6 +67,7 @@ public class AppUtilImpl implements AppUtil{
 			return String.valueOf(instAmt);
 		}
 		
+@Override
 public String calculateIntrestBetween(String amount,String startDate,String intRate,String endDate){
 			
 			double instAmt = 0.00;
@@ -90,8 +92,6 @@ public String calculateIntrestBetween(String amount,String startDate,String intR
 						Date today = new Date();
 						Calendar c = Calendar.getInstance();
 						c.setTime(today);
-						System.out.println("No of days in this months "+c.getActualMaximum(Calendar.DAY_OF_MONTH));
-						
 						 instAmt += (amt*rt*days)/(100*c.getActualMaximum(Calendar.DAY_OF_MONTH));
 					}
 				}
@@ -147,7 +147,6 @@ public String calculateIntrestBetween(String amount,String startDate,String intR
 		    int diffMonth = monthCount; 
 		    int diffDay = remainingDays; 
 
-		    //System.out.println("diffMonth==="+diffMonth +" Month(s) and " + diffDay + " Day(s)");
 		    monthsAndDays.add(String.valueOf(diffMonth));
 		    monthsAndDays.add(String.valueOf(diffDay));
 		    return monthsAndDays;
@@ -214,7 +213,6 @@ public String calculateIntrestBetween(String amount,String startDate,String intR
 				try {
 					dt = ft.parse(date);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			return dt;

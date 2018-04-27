@@ -9,6 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * @author Jai1.Kumar
+ *
+ * @param <PK>
+ * @param <T>
+ */
 public abstract class AbstractDao<PK extends Serializable, T> {
 	
 	private final Class<T> persistentClass;
@@ -26,7 +32,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		try{
 		 session = sessionFactory.getCurrentSession();
 		}catch (Exception e) {
-			session.flush();
+			//session.flush();
 			session = sessionFactory.getCurrentSession();
 		}
 		return session;

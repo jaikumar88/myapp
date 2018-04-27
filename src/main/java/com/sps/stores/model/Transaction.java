@@ -18,6 +18,9 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author Jai1.Kumar
  *
@@ -25,6 +28,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="TRANS_TABLE")
+@JsonAutoDetect
 public class Transaction {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -85,7 +89,8 @@ public class Transaction {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CUST_ID",referencedColumnName = "CUST_ID", nullable = false, updatable = false, insertable = false)
-	private Customer customer;
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	public Customer customer;
 
 	@Transient
 	private String finalDue;

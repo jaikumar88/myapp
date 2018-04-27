@@ -21,15 +21,18 @@ public class UserServiceImpl implements UserService{
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
+	@Override
 	public User findById(int id) {
 		return dao.findById(id);
 	}
 
+	@Override
 	public User findBySSO(String sso) {
 		User user = dao.findBySSO(sso);
 		return user;
 	}
 
+	@Override
 	public void saveUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		dao.save(user);
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService{
 	 * Just fetch the entity from db and update it with proper values within transaction.
 	 * It will be updated in db once transaction ends. 
 	 */
+	@Override
 	public void updateUser(User user) {
 		User entity = dao.findById(user.getId());
 		if(entity!=null){
@@ -55,14 +59,17 @@ public class UserServiceImpl implements UserService{
 	}
 
 	
+	@Override
 	public void deleteUserBySSO(String sso) {
 		dao.deleteBySSO(sso);
 	}
 
+	@Override
 	public List<User> findAllUsers() {
 		return dao.findAllUsers();
 	}
 
+	@Override
 	public boolean isUserSSOUnique(Integer id, String sso) {
 		User user = findBySSO(sso);
 		return ( user == null || ((id != null) && (user.getId() == id)));

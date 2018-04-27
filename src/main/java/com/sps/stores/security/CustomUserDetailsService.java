@@ -27,6 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Autowired
 	private UserService userService;
 	
+	@Override
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String ssoId)
 			throws UsernameNotFoundException {

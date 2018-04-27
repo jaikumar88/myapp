@@ -1,10 +1,12 @@
 package com.sps.stores.application;
 
 import java.sql.Date;
-import java.util.List;
 
-import com.sps.stores.model.Activity;
 
+/**
+ * @author Jai1.Kumar
+ *
+ */
 public interface AppUtil {
 
 	public String calculateIntrestAsOfToday(String amount,String startDate,String rate);

@@ -52,7 +52,7 @@ public class CustomerDaoImpl extends AbstractDao<Integer, Customer> implements C
 	@Override
 	public List<Customer> findAllCustomers() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("location"));
-		List<Customer> customers = (List<Customer>) criteria.list();
+		List<Customer> customers = criteria.list();
 		return customers;
 		
 	}
@@ -62,7 +62,7 @@ public class CustomerDaoImpl extends AbstractDao<Integer, Customer> implements C
 	public List<Customer> findAllCustomersByLocation(String location) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("location"));
 		criteria.add(Restrictions.eq("location", location));
-		List<Customer> customers = (List<Customer>) criteria.list();
+		List<Customer> customers = criteria.list();
 		return customers;
 	}
 

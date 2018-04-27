@@ -1,6 +1,5 @@
 package com.sps.stores.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -20,15 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sps.stores.application.ApplicationConstants;
-import com.sps.stores.model.Activity;
-import com.sps.stores.model.Customer;
 import com.sps.stores.model.Location;
-import com.sps.stores.model.Partner;
-import com.sps.stores.model.Product;
 import com.sps.stores.model.Store;
 import com.sps.stores.model.Transaction;
 import com.sps.stores.model.User;
@@ -123,220 +115,13 @@ public class AppController extends AbstractAppController {
 		return "storelist";
 	}
 	
-	/**
-	 * This method will list all activities created today.
-	 */
-	@RequestMapping(value = { "/activityList" }, method = {RequestMethod.POST,RequestMethod.GET})
-	public String listActivities(ModelMap model,HttpServletRequest request) {
-		String custId = request.getParameter("custId");
-		String locId = request.getParameter("locId");
-		List<Activity> activities = activityService.findAllActivities(locId, custId, "");
-		if(activities!= null && !activities.isEmpty()){
-		model.addAttribute("total",activities.get(activities.size()-1).getTotalAmount());
-		model.addAttribute("totalIntrest",activities.get(activities.size()-1).getTotalIntrest());
-		}
-		model.addAttribute("activities", activities);
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers",customers);
-		List<Customer> customerList = customerService.findAllCustomer(locId);
-		model.addAttribute("customerList",customerList);
-		model.addAttribute("loggedinuser", getPrincipal());
-		model.addAttribute("custId",custId);
-		model.addAttribute("locId",locId);
-		return "activityList";
-	}
-	
-	@RequestMapping(value = { "/transactionList" }, method = {RequestMethod.POST,RequestMethod.GET})
-	public String listTransactions(ModelMap model,HttpServletRequest request) {
-		String custId = request.getParameter("custId");
-		String locId = request.getParameter("locId");
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
-		
-		List<Transaction> transactions = transactionService.findAllTransactions(locId, custId, startDate, endDate);
-		model.addAttribute("transactions", transactions);
-		
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers",customers);
-		List<Customer> customerList = customerService.findAllCustomer(locId);
-		model.addAttribute("customerList",customerList);
-		model.addAttribute("loggedinuser", getPrincipal());
-		model.addAttribute("custId",custId);
-		model.addAttribute("locId",locId);
-		model.addAttribute("startDate",startDate);
-		model.addAttribute("endDate",endDate);
-		return "transactionList";
-	}
-	/**
-	 * This method will list all activities created today.
-	 */
-	@RequestMapping(value = { "/customerList" }, method = RequestMethod.GET)
-	public String listCustomer(ModelMap model) {
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "customerList";
-	}
-	/**
-	 * This method will be called on form submission, handling POST request for
-	 * saving user in database. It also validates the user input
-	 */
-	@RequestMapping(value = { "/newActivity" }, method = RequestMethod.POST)
-	public String saveActivity(@Valid Activity activity, BindingResult result,
-			ModelMap model) {
-
-		if (result.hasErrors()) {
-			return "addactivity";
-		}
-
-		activityService.saveActivity(activity);
-
-		model.addAttribute("success", "Activity For customer " + activity.getCustId() +" saved successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		return "addactivitysuccess";
-	}
-	
-	@RequestMapping(value = { "/close-activity-{id}" }, method = RequestMethod.GET)
-	public String closeActivity(@PathVariable String id,ModelMap model) {
-		Activity activity = activityService.findById(Integer.parseInt(id));
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		activity.setClosingDate(todayDate);
-		activity.setStatus(ApplicationConstants.CLOSE.value());
-		activityService.updateActivity(activity);
-
-		model.addAttribute("success", "Activity For customer " + activity.getCustId() +" closed successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		return "addactivitysuccess";
-	}
-	@RequestMapping(value = { "/close-now-{id}" }, method = RequestMethod.GET)
-	public String closeTransaction(@PathVariable String id,ModelMap model) {
-		Transaction transaction = transactionService.findById(Integer.parseInt(id));
-		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
-		transaction.setCloseDate(todayDate);
-		transaction.setStatus(ApplicationConstants.CLOSE.value());
-		transactionService.updateTransaction(transaction);;
-
-		model.addAttribute("success", "Transaction For customer " + transaction.getCustId() +" closed successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		return "addactivitysuccess";
-	}
-	
-	/**
-	 * This method will provide the medium to add a new user.
-	 */
-	@RequestMapping(value = { "/newCustomer" }, method = RequestMethod.GET)
-	public String newCustomer(ModelMap model) {
-		Customer customer = new Customer();
-		model.addAttribute("customer", customer);
-		model.addAttribute("edit", false);
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addcustomer";
-	}
-	
-	/**
-	 * This method will be called on form submission, handling POST request for
-	 * saving user in database. It also validates the user input
-	 */
-	@RequestMapping(value = { "/newCustomer" }, method = RequestMethod.POST)
-	public String saveCustomer(@Valid Customer customer, BindingResult result,
-			ModelMap model) {
-
-		if (result.hasErrors()) {
-			return "addcustomer";
-		}
-
-		customerService.saveCustomer(customer);
-
-		model.addAttribute("success", "Customer " + customer.getFirstName() +" saved successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addcustomersuccess";
-	}
-	
-	/**
-	 * This method will provide the medium to add a new user.
-	 */
-	@RequestMapping(value = { "/newActivity" }, method = RequestMethod.GET)
-	public String newActivity(ModelMap model,HttpServletRequest request) {
-		
-		Activity activity = new Activity();
-		model.addAttribute("activity", activity);
-		model.addAttribute("edit", false);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addactivity";
-	}
-	
-	@RequestMapping(value = { "/addActivity-{transId}-{locId}-{custId}" }, method = RequestMethod.GET)
-	public ModelAndView addActivity(@PathVariable String transId,@PathVariable String locId,@PathVariable String custId,ModelMap model,RedirectAttributes redir) {
-		
-		Activity activity = new Activity();
-		activity.setTransId(Integer.parseInt(transId));
-		model.addAttribute("activity", activity);
-		model.addAttribute("custId",custId);
-		model.addAttribute("locId",locId);
-		model.addAttribute("edit", false);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		ModelAndView modelAndView = new ModelAndView("redirect:newActivity");
-		redir.addFlashAttribute("custId",custId);
-		redir.addFlashAttribute("locId",locId);
-		redir.addFlashAttribute("transId",transId);
-		redir.addFlashAttribute("loggedinuser",getPrincipal());
-		model.addAttribute("loggedinuser", getPrincipal());
-		return modelAndView;
-		
-	}
-	
-	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.GET)
-	public String newTransaction(ModelMap model) {
-		Transaction transaction = new Transaction();
-		model.addAttribute("transaction", transaction);
-		model.addAttribute("edit", false);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		List<Location> locations = locationService.findAllLocations();
-		model.addAttribute("locations",locations);
-		List<Partner> partners = partnerService.findAllPartnersList();
-		model.addAttribute("partners",partners);
-		List<Product> products = productService.findAllProducts();
-		model.addAttribute("productList",products);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addtransaction";
-	}
 	
 	
-	@RequestMapping(value = { "/newTransaction" }, method = RequestMethod.POST)
-	public String saveTransaction(@Valid Transaction transaction, BindingResult result,
-			ModelMap model,HttpServletRequest request) {
-		String partnerId = request.getParameter("partnerId");
-		
-		if (result.hasErrors()) {
-			return "addtransaction";
-		}
-		transaction.setStatus(ApplicationConstants.OPEN.value());
-		transactionService.saveTransaction(transaction);
-		partnerTransService.savePartnerTrans(transaction,partnerId);
-		model.addAttribute("success", "Transaction For customer " + transaction.getCustId() +" saved successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		return "addtransactionsuccess";
-	}
+	
+	
+	
+	
+	
 	/**
 	 * This method will provide the medium to add a new user.
 	 */
@@ -372,7 +157,7 @@ public class AppController extends AbstractAppController {
 
 		model.addAttribute("success", "Store " + store.getStoreName() +" saved successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
+		
 		return "addstoresuccess";
 	}
 	
@@ -411,7 +196,7 @@ public class AppController extends AbstractAppController {
 
 		model.addAttribute("success", "Location " + location.getLocation() +" saved successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
+		
 		return "addstoresuccess";
 	}
 	/**
@@ -456,7 +241,7 @@ public class AppController extends AbstractAppController {
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
+		
 		return "registrationsuccess";
 	}
 
@@ -469,74 +254,14 @@ public class AppController extends AbstractAppController {
 		
 		model.addAttribute("success", "Transaction For customer " + transaction.getId() +" deleted successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
+		
 		return "addtransactionsuccess";
 	}
 
-	/**
-	 * This method will provide the medium to update an existing user.
-	 */
-	@RequestMapping(value = { "/edit-activity-{id}" }, method = {RequestMethod.GET,RequestMethod.POST})
-	public String editActivity(@PathVariable String id, ModelMap model) {
-		Activity activity = activityService.findById(Integer.parseInt(id));
-		model.addAttribute("activity", activity);
-		model.addAttribute("edit", true);
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "addactivity";
-	}
 	
-	@RequestMapping(value = { "/close-check-{id}" }, method = RequestMethod.GET)
-	public String closeCheck(@PathVariable String id, ModelMap model) {
-		Transaction transaction = transactionService.findById(Integer.parseInt(id));
-		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId(),false);
-		double amount = 0.00;
-		for(Activity act: activities){
-			if(act.getActivityType() != null && "Payment".equalsIgnoreCase(act.getActivityType())){
-				System.out.println("");
-				amount += Double.parseDouble(act.getAmount());
-			}
-		}
-		double transDue = Double.parseDouble(transaction.getDueAmount());
-		if(activities.isEmpty() || amount < transDue){
-			model.addAttribute("transaction",transaction);
-			model.addAttribute("transId",transaction.getId());
-			model.addAttribute("custId",transaction.getCustId());
-			model.addAttribute("locId",transaction.getCustomer().getLocation());
-			model.addAttribute("activities", activities);
-			
-			List<Customer> customers = customerService.findAllCustomers();
-			model.addAttribute("customerList", customers);
-			List<Location> locations = locationService.findAllLocations();
-			model.addAttribute("locations",locations);
-			return "activityList";
-		}else
-		{
-		model.addAttribute("transaction",transaction);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "closeConfirmation";
-		}
-	}
 	
-	@RequestMapping(value = { "/list-activity-{transId}" }, method = RequestMethod.GET)
-	public String listPayments(@PathVariable String transId, ModelMap model) {
-		Transaction transaction = transactionService.findById(Integer.parseInt(transId));
-		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId(),false);
 	
-			model.addAttribute("transaction",transaction);
-			
-			model.addAttribute("custId",transaction.getCustId());
-			model.addAttribute("locId",transaction.getCustomer().getLocation());
-			model.addAttribute("activities", activities);
-			
-			List<Customer> customers = customerService.findAllCustomers();
-			model.addAttribute("customerList", customers);
-			List<Location> locations = locationService.findAllLocations();
-			model.addAttribute("locations",locations);
-			return "activityList";
-		
-	}
+	
 	/**
 	 * This method will provide the medium to update an existing user.
 	 */
@@ -560,15 +285,6 @@ public class AppController extends AbstractAppController {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-
-		/*//Uncomment below 'if block' if you WANT TO ALLOW UPDATING SSO_ID in UI which is a unique key to a User.
-		if(!userService.isUserSSOUnique(user.getId(), user.getSsoId())){
-			FieldError ssoError =new FieldError("user","ssoId",messageSource.getMessage("non.unique.ssoId", new String[]{user.getSsoId()}, Locale.getDefault()));
-		    result.addError(ssoError);
-			return "registration";
-		}*/
-
-
 		userService.updateUser(user);
 
 		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " updated successfully");
@@ -665,7 +381,6 @@ public class AppController extends AbstractAppController {
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){    
-			//new SecurityContextLogoutHandler().logout(request, response, auth);
 			persistentTokenBasedRememberMeServices.logout(request, response, auth);
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}

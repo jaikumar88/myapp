@@ -41,7 +41,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 	public List<Transaction> findAllTransaction() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Transaction> transactions = (List<Transaction>) criteria.list();
+		List<Transaction> transactions = criteria.list();
 		for(Transaction transaction : transactions){
 			Hibernate.initialize(transaction.getCustomer());
 		}
@@ -53,7 +53,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
 		criteria.add(Restrictions.eq("activityCreateDate", date));
-		List<Transaction> transactions = (List<Transaction>) criteria.list();
+		List<Transaction> transactions = criteria.list();
 		for(Transaction transaction : transactions){
 			Hibernate.initialize(transaction.getCustomer());
 		}
@@ -89,7 +89,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 		}
 		
 		//criteria.add(Restrictions.gt("activityCreateDate", date));
-		List<Transaction> transactions = (List<Transaction>) criteria.list();
+		List<Transaction> transactions = criteria.list();
 		for(Transaction transaction : transactions){
 			Hibernate.initialize(transaction.getCustomer());
 		}
@@ -115,7 +115,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 			criteria.add(Restrictions.eq("cust.location", location));
 		}
 		
-		List<Transaction> transactions = (List<Transaction>) criteria.list();
+		List<Transaction> transactions = criteria.list();
 		for(Transaction transaction : transactions){
 			Hibernate.initialize(transaction.getCustomer());
 		}

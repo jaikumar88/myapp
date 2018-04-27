@@ -58,7 +58,7 @@ public class PartnerTransactionDaoImpl extends AbstractDao<Integer, PartnerTrans
 	@Override
 	public List<PartnerTransaction> findAllPartnerTransactions() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
-		List<PartnerTransaction> partnersTrans = (List<PartnerTransaction>) criteria.list();
+		List<PartnerTransaction> partnersTrans = criteria.list();
 		for(PartnerTransaction transaction : partnersTrans){
 			Hibernate.initialize(transaction.getPartner());
 		}
@@ -72,7 +72,7 @@ public class PartnerTransactionDaoImpl extends AbstractDao<Integer, PartnerTrans
 		Criteria criteria = createEntityCriteria().addOrder(Order.desc("activityCreateDate"));
 		criteria.createAlias("partner", "partner");
 		criteria.add(Restrictions.eq("partner.id", Integer.parseInt(id)));
-		List<PartnerTransaction> partnersTrans = (List<PartnerTransaction>) criteria.list();
+		List<PartnerTransaction> partnersTrans = criteria.list();
 		
 		return partnersTrans;
 	}
@@ -90,7 +90,7 @@ public class PartnerTransactionDaoImpl extends AbstractDao<Integer, PartnerTrans
 		if(endDate != null && !"".equalsIgnoreCase(endDate)){
 			criteria.add(Restrictions.le("activityCreateDate",appUtil.stringToDate(endDate)));
 		}
-		List<PartnerTransaction> partnersTrans = (List<PartnerTransaction>) criteria.list();
+		List<PartnerTransaction> partnersTrans = criteria.list();
 		for(PartnerTransaction transaction : partnersTrans){
 			Hibernate.initialize(transaction.getPartner());
 		}

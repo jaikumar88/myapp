@@ -3,6 +3,7 @@ package com.sps.stores.dao.product;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
@@ -32,8 +33,8 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
 	@Override
 	public List<Product> findAllProducts() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("name"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Product> products = (List<Product>) criteria.list();
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Product> products = criteria.list();
 		return products;
 		
 	}
@@ -42,8 +43,8 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
 	public Product findByProductType(String type) {
 		
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("name"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
-		List<Product> products = (List<Product>) criteria.list();
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);//To avoid duplicates.
+		List<Product> products = criteria.list();
 		
 		return products.get(0);
 	}
