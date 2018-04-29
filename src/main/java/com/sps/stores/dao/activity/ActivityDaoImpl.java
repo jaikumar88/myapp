@@ -58,13 +58,13 @@ public class ActivityDaoImpl extends AbstractDao<Integer, Activity> implements A
 
 	@Override
 	public void delete(Activity activity) {
-		delete(activity);
+		super.delete(activity);
 	}
 
 	@Override
 	public void deleteById(String id) {
 		Criteria crit = createEntityCriteria();
-		crit.add(Restrictions.eq("Id", id));
+		crit.add(Restrictions.eq("id", Integer.parseInt(id)));
 		Activity activity = (Activity)crit.uniqueResult();
 		delete(activity);
 	}
