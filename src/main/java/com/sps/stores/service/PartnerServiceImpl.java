@@ -55,10 +55,11 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Override
 	public void deletePartnerById(String id) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
+	
 	
 	@Override
 	public List<Partner> findAllPartners() {

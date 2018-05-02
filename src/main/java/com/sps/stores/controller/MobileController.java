@@ -1,19 +1,16 @@
 package com.sps.stores.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +47,15 @@ public class MobileController extends AbstractAppController {
                             String.format(response, name));
     }
     
+    @RequestMapping(value = "/mLogin", method = RequestMethod.GET)
+	public String loginPage() {
+		if (isCurrentAuthenticationAnonymous()) {
+			return "login";
+	    } else {
+	    	return "redirect:/home";  
+	    }
+	}
+    
     /**
 	 * This method returns true if users is already authenticated [logged-in], else false.
 	 */
@@ -81,24 +87,19 @@ public class MobileController extends AbstractAppController {
 	 */
 	@RequestMapping(value = { "/mPartnerList" }, method = RequestMethod.GET)
 	public List<Partner> listPartner(ModelMap model) {
-		List<Partner> partners = partnerService.findAllPartners();
-		model.addAttribute("partners", partners);
-		model.addAttribute("loggedinuser", getPrincipal());
+		List<Partner> partners = partnerService.findAllPartnersList();
 		return partners;
 	}
 	
 	@RequestMapping(value = { "/mCustomerList" }, method = RequestMethod.GET)
 	public List<Customer> listCustomer(ModelMap model) {
 		
-		List<Customer> customers = customerService.findAllCustomers();
-		model.addAttribute("customers", customers);
-		model.addAttribute("loggedinuser", getPrincipal());
-		return customers;
+		return customerService.findAllCustomersList();
+		
 	}
 	
 	@RequestMapping(value = { "/mNewTransaction" }, method = RequestMethod.POST)
 	public Transaction saveTransaction(@RequestBody Transaction transaction) {
-		
 		transaction.setStatus(ApplicationConstants.OPEN.value());
 		Partner partner = partnerService.findByName(transaction.getPartnerId());
 		transactionService.saveTransaction(transaction);
