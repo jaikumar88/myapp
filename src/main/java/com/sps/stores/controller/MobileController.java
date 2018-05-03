@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +25,15 @@ import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
 import com.sps.stores.model.Product;
 import com.sps.stores.model.Transaction;
+import com.sps.stores.model.User;
+
 
 @RestController
 public class MobileController extends AbstractAppController {
 
-	@Autowired
-	AuthenticationTrustResolver authenticationTrustResolver;
 	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
    
     private final AtomicLong counter = new AtomicLong();
 
@@ -47,13 +49,16 @@ public class MobileController extends AbstractAppController {
                             String.format(response, name));
     }
     
-    @RequestMapping(value = "/mLogin", method = RequestMethod.GET)
-	public String loginPage() {
-		if (isCurrentAuthenticationAnonymous()) {
-			return "login";
-	    } else {
-	    	return "redirect:/home";  
-	    }
+    @RequestMapping(value = "/mLogin", method = RequestMethod.POST)
+    public User login(@RequestBody User user) {
+    	boolean isUserAuthorize = false;
+    	User dbUser  = userService.findBySSO(user.getSsoId());
+		if(userService.findBySSO(user.getSsoId()) != null){
+		   if(userService.findBySSO(user.getSsoId()).getPassword().equals(passwordEncoder.encode(user.getPassword()))){
+			   return  dbUser;
+		   }
+		}
+		return dbUser;
 	}
     
     /**
