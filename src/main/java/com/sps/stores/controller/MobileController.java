@@ -1,5 +1,6 @@
 package com.sps.stores.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -141,5 +143,25 @@ public class MobileController extends AbstractAppController {
 		return activity;
 	}
 	
+	@RequestMapping(value = { "/mclose-check-{id}" }, method = RequestMethod.GET)
+	public List<Activity> closeCheck(@PathVariable String id) {
+		Transaction transaction = transactionService.findById(Integer.parseInt(id));
+		List<Activity> activities = activityService.getAllActivityForTransaction(transaction.getId(),false);
+		return activities;
+	}
+	
+	@RequestMapping(value = { "/mclose-activity-{id}" }, method = RequestMethod.GET)
+	public String closeActivity(@PathVariable String id) {
+		try{
+		Activity activity = activityService.findById(Integer.parseInt(id));
+		String todayDate = (new SimpleDateFormat("YYYY-MM-dd")).format(new Date());
+		activity.setClosingDate(todayDate);
+		activity.setStatus(ApplicationConstants.CLOSE.value());
+		activityService.updateActivity(activity);
+		}catch (Exception e) {
+			return "false";
+		}
+		return "true";
+	}
 	
 }

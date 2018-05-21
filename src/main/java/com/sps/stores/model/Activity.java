@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ACTIVITY")
 public class Activity {
@@ -59,6 +61,7 @@ public class Activity {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CUST_ID",referencedColumnName = "CUST_ID", nullable = false, updatable = false, insertable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Customer owner;
 	
 	

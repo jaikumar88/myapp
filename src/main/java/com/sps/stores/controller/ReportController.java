@@ -11,11 +11,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.sps.stores.application.AppUtil;
+import com.sps.stores.model.Customer;
+import com.sps.stores.model.Location;
+import com.sps.stores.model.Report;
 import com.sps.stores.model.Transaction;
+import com.sps.stores.service.ReportService;
 import com.sps.stores.service.TransactionService;
 
 @Controller
@@ -24,6 +29,9 @@ public class ReportController {
 
 @Autowired
 TransactionService transactionService;
+
+@Autowired
+ReportService reportService;
 
 @Autowired
 AppUtil appUtil;
@@ -53,6 +61,8 @@ public Model download(Model model,HttpServletRequest request) {
     return model;
 }
 
+
+
 protected String getPrincipal(){
 	String userName = null;
 	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -64,4 +74,19 @@ protected String getPrincipal(){
 	}
 	return userName;
 }
+
+@RequestMapping(value = { "/salesReport" }, method = {RequestMethod.POST,RequestMethod.GET})
+public String listTransactions(ModelMap model,HttpServletRequest request) {
+	
+	String startDate = request.getParameter("startDate");
+	String endDate = request.getParameter("endDate");
+	List<Report> records = reportService.getSaleReports(startDate, endDate);
+	model.addAttribute("records", records);
+	model.addAttribute("startDate",startDate);
+	model.addAttribute("endDate",endDate);
+	return "transactionList";
+}
+
+
+
 }
