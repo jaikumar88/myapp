@@ -1,11 +1,14 @@
 package com.sps.stores.model;
 
-public class Report {
+public class SalesReport {
 	
 	String reportDate;
 	double saleAmount;
 	double expenses;
 	double dueAmount;
+	double receivedAmount;
+	double totalProducts;
+	double totalWeight;
 	double profitLoss;
 	/**
 	 * @return the reportDate
@@ -66,6 +69,42 @@ public class Report {
 	 */
 	public void setProfitLoss(double profitLoss) {
 		this.profitLoss = profitLoss;
+	}
+	/**
+	 * @return the receivedAmount
+	 */
+	public double getReceivedAmount() {
+		return receivedAmount;
+	}
+	/**
+	 * @param receivedAmount the receivedAmount to set
+	 */
+	public void setReceivedAmount(double receivedAmount) {
+		this.receivedAmount = receivedAmount;
+	}
+	/**
+	 * @return the totalProducts
+	 */
+	public double getTotalProducts() {
+		return totalProducts;
+	}
+	/**
+	 * @param totalProducts the totalProducts to set
+	 */
+	public void setTotalProducts(double totalProducts) {
+		this.totalProducts = totalProducts;
+	}
+	/**
+	 * @return the totalWeight
+	 */
+	public double getTotalWeight() {
+		return totalWeight;
+	}
+	/**
+	 * @param totalWeight the totalWeight to set
+	 */
+	public void setTotalWeight(double totalWeight) {
+		this.totalWeight = totalWeight;
 	}
 
 }

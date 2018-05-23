@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.sps.stores.application.AppUtil;
-import com.sps.stores.model.Customer;
-import com.sps.stores.model.Location;
-import com.sps.stores.model.Report;
+import com.sps.stores.model.SalesReport;
 import com.sps.stores.model.Transaction;
 import com.sps.stores.service.ReportService;
 import com.sps.stores.service.TransactionService;
@@ -76,15 +74,21 @@ protected String getPrincipal(){
 }
 
 @RequestMapping(value = { "/salesReport" }, method = {RequestMethod.POST,RequestMethod.GET})
-public String listTransactions(ModelMap model,HttpServletRequest request) {
+public String salesReport(ModelMap model,HttpServletRequest request) {
 	
 	String startDate = request.getParameter("startDate");
 	String endDate = request.getParameter("endDate");
-	List<Report> records = reportService.getSaleReports(startDate, endDate);
-	model.addAttribute("records", records);
+	if(startDate == null || startDate.equalsIgnoreCase("")){
+		startDate = appUtil.dateToString(new Date());
+	}
+	if(endDate == null || endDate.equalsIgnoreCase("")){
+		endDate = appUtil.dateToString(new Date());
+	}
+	List<SalesReport> salesReport = reportService.getSaleReports(startDate, endDate);
+	model.addAttribute("salesreport", salesReport);
 	model.addAttribute("startDate",startDate);
 	model.addAttribute("endDate",endDate);
-	return "transactionList";
+	return "salesreport";
 }
 
 

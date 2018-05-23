@@ -26,6 +26,7 @@ import com.sps.stores.model.Greeting;
 import com.sps.stores.model.Location;
 import com.sps.stores.model.Partner;
 import com.sps.stores.model.Product;
+import com.sps.stores.model.SalesReport;
 import com.sps.stores.model.Transaction;
 import com.sps.stores.model.User;
 
@@ -163,5 +164,15 @@ public class MobileController extends AbstractAppController {
 		}
 		return "true";
 	}
+	
+	@RequestMapping(value = { "/mSalesReport-{date}" }, method = {RequestMethod.GET})
+	public List<SalesReport> salesReport(@PathVariable String date) {
+		if(date == null || date.equalsIgnoreCase("")){
+			date = appUtil.dateToString(new Date());
+		}
+		List<SalesReport> salesReport = reportService.getSaleReports(date, date);
+		return salesReport;
+	}
+
 	
 }
