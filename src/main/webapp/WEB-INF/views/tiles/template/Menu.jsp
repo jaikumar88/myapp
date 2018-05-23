@@ -19,6 +19,7 @@
 	   	<li><a href="${pageContext.request.contextPath}/newPartnerTrans">Add Partner Trans</a></li>
 	   	<li><a href="${pageContext.request.contextPath}/locationList">List Location</a></li>
 	   	<li><a href="${pageContext.request.contextPath}/newLocation">Add Location</a></li>
+	   	<li><a href="${pageContext.request.contextPath}/salesReport">Sales Report</a></li>
 	   	</sec:authorize>
 	   	<sec:authorize access="hasRole('ADMIN')">
       	 	<li><a href="${pageContext.request.contextPath}/userList">User List</a></li>
